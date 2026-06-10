@@ -1,0 +1,16 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# Arquivos de usuário
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/

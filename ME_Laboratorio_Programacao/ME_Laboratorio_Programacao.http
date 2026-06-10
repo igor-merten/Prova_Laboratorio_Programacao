@@ -1,0 +1,6 @@
+@ME_Laboratorio_Programacao_HostAddress = http://localhost:5268
+
+GET {{ME_Laboratorio_Programacao_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
