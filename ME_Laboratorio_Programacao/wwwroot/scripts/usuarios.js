@@ -1,33 +1,9 @@
-const API_URL = 'https://localhost:7194/api';
-
-// Elementos do DOM específicos desta página
-const userForm = document.getElementById('user-form');
 const usersTableBody = document.querySelector('#users-table tbody');
-const btnLogout = document.getElementById('btn-logout');
-const userLoggedSpan = document.getElementById('user-logged');
+const userForm = document.getElementById('user-form');
 
-const fetchOptions = (method, body = null) => {
-    const config = {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include'
-    };
-    if (body) config.body = JSON.stringify(body);
-    return config;
-};
+document.addEventListener("DOMContentLoaded", () => {
+    carregarUsuarios();
 
-// EXECUTA AO CARREGAR A PÁGINA
-document.addEventListener('DOMContentLoaded', () => {
-    const nomeSalvo = localStorage.getItem('usuarioNome');
-    
-    if (!nomeSalvo) {
-        // Se tentar acessar a página direto sem login, chuta de volta
-        window.location.href = 'index.html';
-        return;
-    }
-
-    userLoggedSpan.innerText = nomeSalvo;
-    carregarUsuarios(); // Busca os dados do banco
 });
 
 // 1. CARREGAR LISTA DE USUÁRIOS (READ)

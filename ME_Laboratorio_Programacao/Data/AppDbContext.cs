@@ -1,4 +1,6 @@
 ﻿using ME_Laboratorio_Programacao.Models;
+using ME_Laboratorio_Programacao.Models.Agentes;
+using ME_Laboratorio_Programacao.Models.Mensagens;
 using Microsoft.EntityFrameworkCore;
 
 namespace ME_Laboratorio_Programacao.Data;
@@ -9,6 +11,14 @@ public class AppDbContext : DbContext
 
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<PerfilAcesso> PerfilAcessos => Set<PerfilAcesso>();
+    public DbSet<CategoriaAgente> CategoriaAgentes => Set<CategoriaAgente>();
+    public DbSet<AgenteBase> Agentes => Set<AgenteBase>(); 
+    public DbSet<CanalOrigem> CanaisOrigem => Set<CanalOrigem>();
+    public DbSet<SessaoAtendimento> SessoesAtendimento => Set<SessaoAtendimento>();
+    public DbSet<Mensagem> Mensagens => Set<Mensagem>();
+    public DbSet<ContextoMemoria> ContextosMemoria => Set<ContextoMemoria>();
+    public DbSet<LogAuditoria> LogsAuditoria => Set<LogAuditoria>();
+    public DbSet<EstatisticaAcesso> EstatisticasAcesso => Set<EstatisticaAcesso>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,6 +31,9 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
         });
 
+        modelBuilder.Entity<CategoriaAgente>()
+        .ToTable("CategoriaAgente");
+
         modelBuilder.Entity<Usuario>(entity =>
         {
             entity.ToTable("Usuarios");
@@ -32,5 +45,30 @@ public class AppDbContext : DbContext
                   .HasForeignKey(d => d.PerfilAcessoId)
                   .OnDelete(DeleteBehavior.Restrict);
         });
+
+        modelBuilder.Entity<AgenteBase>()
+            .ToTable("Agente")
+            .HasDiscriminator<string>("TipoAgente")
+            .HasValue<AgentePadrao>("Padrao")
+            .HasValue<SuperAgente>("Super");
+
+        modelBuilder.Entity<AgenteBase>()
+            .HasOne(a => a.CategoriaAgente)
+            .WithMany(c => c.Agentes)
+            .HasForeignKey(a => a.CategoriaAgenteId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Mensagem>()
+            .HasOne(m => m.SessaoAtendimento)
+            .WithMany(s => s.Mensagens)
+            .HasForeignKey(m => m.SessaoAtendimentoId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<LogAuditoria>()
+            .HasOne(l => l.Usuario)
+            .WithMany()
+            .HasForeignKey(l => l.UsuarioId)
+            .OnDelete(DeleteBehavior.SetNull);
+
     }
 }

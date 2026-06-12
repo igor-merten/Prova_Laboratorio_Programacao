@@ -3,7 +3,7 @@
 public abstract class MensagemBase
 {
     public int Id { get; set; }
-    public int IdSessao { get; set; }
+    public int SessaoAtendimentoId { get; set; }
     public string Conteudo { get; set; } = "";
     public DateTime EnviadaEm { get; set; } = DateTime.UtcNow;
 

@@ -6,5 +6,5 @@ public class CategoriaAgente
     public string Nome { get; set; } = "";
     public string CorHex { get; set; } = "#ffffff";
 
-    public virtual ICollection<AgenteBase> SessoesAtendimento { get; set; } = new List<AgenteBase>();
+    public virtual ICollection<AgenteBase> Agentes { get; set; } = new List<AgenteBase>();
 }

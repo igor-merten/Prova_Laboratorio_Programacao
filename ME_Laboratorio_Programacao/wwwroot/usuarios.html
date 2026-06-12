@@ -14,7 +14,7 @@
                 <a onclick="navegarPara('dashboard')" data-page="dashboard" >📊 Dashboard</a>
                 <a onclick="navegarPara('chat')" data-page="chat">💬 Chat / Memória</a>
                 <a onclick="navegarPara('agentes')" data-page="agentes">🤖 Agentes</a>
-                <a onclick="navegarPara('categorias')" data-page="categorias">🏷️ Categorias</a>
+                <a onclick="navegarPara('categoriaAgente')" data-page="categorias">🏷️ Categorias</a>
                 <a onclick="navegarPara('canais')" data-page="canais">🌐 Canais</a>
                 <a onclick="navegarPara('usuarios')" data-page="usuarios" class="active">👤 Usuários</a>
             </nav>
@@ -28,8 +28,8 @@
         <main id="main">
             <div id="page-content" class="container">
                 <div id="topbar">
-                    <h1>Bem-vindo, <span id="user-logged">...</span>!</h1>
-                    <button id="btn-logout" class="btn-danger">Sair do Sistema</button>
+                    <h2>Bem-vindo, <span id="user-logged">...</span>!</h2>
+                    <button id="btn-logout" class="btn btn-danger">Sair do Sistema</button>
                 </div>
 
                 <div>
@@ -44,7 +44,6 @@
                                     <option value="">Selecione o Perfil</option>
                                     <option value="1">Admin</option>
                                     <option value="2">Operador</option>
-                                    <option value="3">Visualizador</option>
                                 </select>
                                 <button type="submit" class="btn-success">Adicionar</button>
                             </div>
@@ -73,7 +72,7 @@
         </main>
     </div>
     
-
+    <script src="scripts/app.js"></script>
     <script src="scripts/usuarios.js"></script>
 </body>
 </html>
