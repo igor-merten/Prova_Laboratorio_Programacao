@@ -118,7 +118,6 @@ CREATE TABLE "LogAuditoria" (
     "UsuarioId"   INT,
     "Acao"        VARCHAR(500) NOT NULL,
     "Entidade"    VARCHAR(255),
-    "EntidadeId"  INT,
     "DataCriacao" TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
 
     CONSTRAINT "FK_Log_Usuario"

@@ -26,7 +26,7 @@ public class UsuariosController : ControllerBase
     {
         var usuarios = await _context.Usuarios
             .Include(u => u.PerfilAcesso)
-            .Select(u => new { u.Id, u.Nome, u.Email, u.Ativo, Perfil = u.PerfilAcesso!.Nome })
+            .Select(u => new { u.Id, u.Nome, u.Email, u.Ativo, Perfil = u.PerfilAcesso!.Nome, u.PerfilAcessoId })
             .ToListAsync();
 
         return Ok(usuarios);
@@ -61,9 +61,13 @@ public class UsuariosController : ControllerBase
         if (usuario == null) return NotFound();
 
         usuario.Nome = request.Nome;
-        usuario.Email = request.Email;
         usuario.Ativo = request.Ativo;
         usuario.PerfilAcessoId = request.PerfilAcessoId;
+
+        if (!string.IsNullOrWhiteSpace(request.Senha))
+        {
+            usuario.Senha = BCrypt.Net.BCrypt.HashPassword(request.Senha);
+        }
 
         await _context.SaveChangesAsync();
         return NoContent();

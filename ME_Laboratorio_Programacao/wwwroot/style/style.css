@@ -216,7 +216,10 @@ th { background-color: #f9fafb; }
     background-color: #fff;
     font-size: 16px;
     padding: 0px;
-    padding-right: 10px;
+}
+
+.barrer{
+    margin: 0px 7px 0px 7px;
 }
 
 

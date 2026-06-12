@@ -16,8 +16,8 @@
                 <a onclick="navegarPara('chat')" data-page="chat"><i class="fa-regular fa-comment-dots"></i> Chat / Memória</a>
                 <a onclick="navegarPara('agentes')" data-page="agentes"><i class="fa-solid fa-robot"></i> Agentes</a>
                 <a onclick="navegarPara('categoriaAgente')" data-page="categorias"><i class="fa-solid fa-layer-group"></i> Categorias</a>
-                <a onclick="navegarPara('canais')" data-page="canais"><i class="fa-solid fa-globe"></i> Canais</a>
-                <a onclick="navegarPara('usuarios')" data-page="usuarios" class="active"><i class="fa-solid fa-user"></i> Usuários</a>
+                <a onclick="navegarPara('canais')" data-page="canais" class="active"><i class="fa-solid fa-globe"></i> Canais</a>
+                <a onclick="navegarPara('usuarios')" data-page="usuarios"><i class="fa-solid fa-user"></i> Usuários</a>
             </nav>
             <div class="user-info">
             <strong><span id="user-logged">...</span></strong>
@@ -32,16 +32,14 @@
 
                     <section class="card table-section">
                         <div class="titulo-table">
-                            <h2>Usuários</h2>
-                            <button class="btn btn-primary" onclick="modalUsuario()">+ Novo Usuário</button>
+                            <h2>Canais</h2>
+                            <button class="btn btn-primary" onclick="modalCanal()">+ Novo Canal</button>
                         </div>
-                        <table id="users-table">
+                        <table id="canais-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Nome</th>
-                                    <th>E-mail</th>
-                                    <th>Perfil</th>
                                     <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
@@ -56,6 +54,6 @@
     </div>
     
     <script src="scripts/app.js"></script>
-    <script src="scripts/usuarios.js"></script>
+    <script src="scripts/canais.js"></script>
 </body>
 </html>

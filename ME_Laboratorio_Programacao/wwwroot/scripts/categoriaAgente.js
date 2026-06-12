@@ -94,7 +94,8 @@ async function carregarCategorias() {
                     <code>${cat.corHex || '#cccccc'}</code>
                 </td>
                 <td>
-                    <button class="icon-btn" style="color: #00317C" onclick="prepararEdicao(${cat.id}, '${cat.nome}', '${cat.corHex}')" > <i class="fa-solid fa-pen-to-square"></i> <small>Editar </small></button>
+                    <button class="icon-btn" style="color: #00317C" onclick="prepararEdicao(${cat.id}, '${cat.nome}', '${cat.corHex}')" > <i class="fa-solid fa-pen-to-square"></i> <small>Editar </small></button> 
+                    <span class="barrer">|</span>
                     <button class="icon-btn" style="color: #ca0707" onclick="deletarCategoria(${cat.id})"><i class="fa-solid fa-trash-can"></i>  <small>Deletar </small></button>
                 </td>
             `;
