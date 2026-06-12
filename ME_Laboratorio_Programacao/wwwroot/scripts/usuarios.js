@@ -27,7 +27,17 @@ async function carregarUsuarios() {
                 <td>${u.nome}</td>
                 <td>${u.email}</td>
                 <td><strong>${u.perfil}</strong></td>
-                <td>${u.ativo ? '🟢 Ativo' : '🔴 Inativo'}</td>
+                <td>
+                    <span style="
+                        display: inline-block; 
+                        width: 12px; 
+                        height: 12px; 
+                        border-radius: 50%; 
+                        background-color: ${u.ativo ? '#0aa50a' : '#ff0000'}; 
+                        margin-right: 8px;
+                        border: 1px solid #ddd;
+                    "></span>
+                </td>
                 <td>
                     <button class="btn-danger" onclick="deletarUsuario(${u.id})" style="padding: 4px 8px; font-size: 12px;">Excluir</button>
                 </td>
@@ -84,22 +94,3 @@ async function deletarUsuario(id) {
     }
 }
 
-// 4. EVENTO DE LOGOUT
-if (btnLogout) {
-    btnLogout.onclick = async (e) => {
-        e.preventDefault();
-        try {
-            await fetch(`${API_URL}/account/logout`, fetchOptions('POST'));
-        } catch (error) {
-            console.error('Erro ao limpar sessão no servidor:', error);
-        } finally {
-            efetuarLogoutLocal();
-        }
-    };
-}
-
-// Limpa os dados locais e joga para o index
-function efetuarLogoutLocal() {
-    localStorage.removeItem('usuarioNome');
-    window.location.href = '../index.html';
-}

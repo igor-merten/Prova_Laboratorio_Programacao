@@ -28,6 +28,7 @@ loginForm.addEventListener('submit', async (e) => {
         if (response.ok) {
             // Guarda o nome do usuário para usar na tela de dashboard
             localStorage.setItem('usuarioNome', data.usuario);
+            localStorage.setItem('perfil', data.perfil);
             
             // Redireciona o navegador para a página de usuários
             window.location.href = '../usuarios.html';

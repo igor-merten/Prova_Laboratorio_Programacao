@@ -48,7 +48,7 @@ public class AuthController : ControllerBase
             ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
         });
 
-        return Ok(new { mensagem = "Login realizado com sucesso", usuario = usuario.Nome });
+        return Ok(new { mensagem = "Login realizado com sucesso", usuario = usuario.Nome, perfil = usuario.PerfilAcesso?.Nome });
     }
 
     [HttpPost("logout")]

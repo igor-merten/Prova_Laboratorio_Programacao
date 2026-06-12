@@ -65,7 +65,7 @@ body {
 }
 
 #sidebar nav a:hover { color: var(--text); background: var(--surface2); }
-#sidebar nav a.active { color: var(--accent2); border-left-color: var(--accent); background: var(--surface2); }
+#sidebar nav a.active { color: #a30b00; background-color: #d8d8d8; border-left-color: var(--accent); }
 
 #sidebar .user-info {
   padding: 16px 20px;
@@ -212,6 +212,13 @@ th { background-color: #f9fafb; }
   gap: 7px;
 }
 
+.icon-btn{
+    background-color: #fff;
+    font-size: 16px;
+    padding: 0px;
+    padding-right: 10px;
+}
+
 
 /* modal */
 .modal-overlay {
@@ -231,3 +238,4 @@ th { background-color: #f9fafb; }
   overflow-y: auto;
 }
 .modal h3 { font-size: 1.05rem; margin-bottom: 22px; }
+

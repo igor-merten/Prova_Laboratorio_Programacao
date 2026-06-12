@@ -1,7 +1,8 @@
 const API_URL = 'https://localhost:7194/api';
 
-const btnLogout = document.getElementById('btn-logout');
+const btnLogout = document.getElementById('logout-link');
 const userLoggedSpan = document.getElementById('user-logged');
+const profileLoggedSpan = document.getElementById('profile-logged');
 
 const fetchOptions = (method, body = null) => {
     const config = {
@@ -17,6 +18,7 @@ const fetchOptions = (method, body = null) => {
 // EXECUTA AO CARREGAR A PÁGINA
 document.addEventListener('DOMContentLoaded', () => {
     const nomeSalvo = localStorage.getItem('usuarioNome');
+    const perfilSalvo = localStorage.getItem('perfil');
     
     if (!nomeSalvo) {
         window.location.href = 'index.html';
@@ -25,8 +27,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (userLoggedSpan) {
         userLoggedSpan.textContent = nomeSalvo;
+        profileLoggedSpan.textContent = perfilSalvo;
     }
 });
+
+
+// 4. EVENTO DE LOGOUT
+if (btnLogout) {
+    btnLogout.onclick = async (e) => {
+        e.preventDefault();
+        try {
+            await fetch(`${API_URL}/account/logout`, fetchOptions('POST'));
+        } catch (error) {
+            console.error('Erro ao limpar sessão no servidor:', error);
+        } finally {
+            efetuarLogoutLocal();
+        }
+    };
+}
+
+// Limpa os dados locais e joga para o index
+function efetuarLogoutLocal() {
+    localStorage.removeItem('usuarioNome');
+    window.location.href = '../index.html';
+}
 
 // navegacao
 function navegarPara(pagina) {

@@ -4,34 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/style.css">
+    <script src="https://kit.fontawesome.com/121ef5a672.js" crossorigin="anonymous"></script>
     <title>Cadastro Usuários</title>
 </head>
 <body>
     <div id="app">
         <aside id="sidebar">
-            <div class="brand">🤖 ME_LAB</div>
+            <div class="brand">AgentMM</div>
             <nav id="nav">
-                <a onclick="navegarPara('dashboard')" data-page="dashboard" >📊 Dashboard</a>
-                <a onclick="navegarPara('chat')" data-page="chat">💬 Chat / Memória</a>
-                <a onclick="navegarPara('agentes')" data-page="agentes">🤖 Agentes</a>
-                <a onclick="navegarPara('categoriaAgente')" data-page="categorias">🏷️ Categorias</a>
-                <a onclick="navegarPara('canais')" data-page="canais">🌐 Canais</a>
-                <a onclick="navegarPara('usuarios')" data-page="usuarios" class="active">👤 Usuários</a>
+                <a onclick="navegarPara('dashboard')" data-page="dashboard" ><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a onclick="navegarPara('chat')" data-page="chat"><i class="fa-regular fa-comment-dots"></i> Chat / Memória</a>
+                <a onclick="navegarPara('agentes')" data-page="agentes"><i class="fa-solid fa-robot"></i> Agentes</a>
+                <a onclick="navegarPara('categoriaAgente')" data-page="categorias"><i class="fa-solid fa-layer-group"></i> Categorias</a>
+                <a onclick="navegarPara('canais')" data-page="canais"><i class="fa-solid fa-globe"></i> Canais</a>
+                <a onclick="navegarPara('usuarios')" data-page="usuarios" class="active"><i class="fa-solid fa-user"></i> Usuários</a>
             </nav>
             <div class="user-info">
-            <strong>Administrador</strong>
-            Admin
+            <strong><span id="user-logged">...</span></strong>
+            <span id="profile-logged"></span>
             <br><br>
-            <a href="#" onclick="logout()" style="color:var(--danger);font-size:.8rem">Sair</a>
+            <a href="#" id="logout-link" style="color:var(--danger);font-size:.8rem">Sair</a>
             </div>
         </aside>
         <main id="main">
             <div id="page-content" class="container">
-                <div id="topbar">
-                    <h2>Bem-vindo, <span id="user-logged">...</span>!</h2>
-                    <button id="btn-logout" class="btn btn-danger">Sair do Sistema</button>
-                </div>
-
                 <div>
                     <section class="card Form-section">
                         <h3>Cadastrar Novo Usuário</h3>
