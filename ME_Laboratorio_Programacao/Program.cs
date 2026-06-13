@@ -12,7 +12,7 @@ builder.Services.AddAuthentication("CookieAuth")
     .AddCookie("CookieAuth", options =>
     {
         options.Cookie.Name = "AuthToken";
-        options.Cookie.SameSite = SameSiteMode.None; 
+        options.Cookie.SameSite = SameSiteMode.Lax; 
         options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
         options.Cookie.HttpOnly = true;
         options.ExpireTimeSpan = TimeSpan.FromHours(2);
