@@ -33,13 +33,19 @@ builder.Services.AddAuthentication("CookieAuth")
     });
 
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Impede que o JSON quebre em relacionamentos de tabelas (Loop Infinito)
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 
 // 3. Configuração do Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new() { Title = "Minha API de Autenticação", Version = "v1" });
+    options.SwaggerDoc("v1", new() { Title = "AgentMM", Version = "v1" });
 });
 
 // 4. Configuração do CORS (Ajuste a URL para o endereço do seu Front-end HTML/CSS/JS)

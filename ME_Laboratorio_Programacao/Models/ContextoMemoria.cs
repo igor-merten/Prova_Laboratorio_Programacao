@@ -8,6 +8,6 @@ public class ContextoMemoria
     public string? Resumo { get; set; }
     public DateTime UltimaAtualizacao { get; set; } = DateTime.UtcNow;
 
-    public virtual AgenteBase Agente { get; set; } = null!;
+    public virtual Agente Agente { get; set; } = null!;
     public virtual Usuario Usuario { get; set; } = null!;
 }

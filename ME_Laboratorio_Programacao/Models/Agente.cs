@@ -1,6 +1,6 @@
 ﻿using ME_Laboratorio_Programacao.Models;
 
-public abstract class AgenteBase : EntidadeBase
+public class Agente : EntidadeBase
 {
     public required virtual string Nome { get; set; }
     public string? Descricao { get; set; }

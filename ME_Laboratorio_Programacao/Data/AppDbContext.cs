@@ -1,5 +1,4 @@
 ﻿using ME_Laboratorio_Programacao.Models;
-using ME_Laboratorio_Programacao.Models.Agentes;
 using ME_Laboratorio_Programacao.Models.Mensagens;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -19,7 +18,7 @@ public class AppDbContext : DbContext
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<PerfilAcesso> PerfilAcessos => Set<PerfilAcesso>();
     public DbSet<CategoriaAgente> CategoriaAgentes => Set<CategoriaAgente>();
-    public DbSet<AgenteBase> Agentes => Set<AgenteBase>();
+    public DbSet<Agente> Agentes => Set<Agente>();
     public DbSet<CanalOrigem> CanaisOrigem => Set<CanalOrigem>();
     public DbSet<SessaoAtendimento> SessoesAtendimento => Set<SessaoAtendimento>();
     public DbSet<Mensagem> Mensagens => Set<Mensagem>();
@@ -50,13 +49,10 @@ public class AppDbContext : DbContext
                   .OnDelete(DeleteBehavior.Restrict);
         });
 
-        modelBuilder.Entity<AgenteBase>()
-            .ToTable("Agente")
-            .HasDiscriminator<string>("TipoAgente")
-            .HasValue<AgentePadrao>("Padrao")
-            .HasValue<SuperAgente>("Super");
+        modelBuilder.Entity<Agente>()
+            .ToTable("Agente");
 
-        modelBuilder.Entity<AgenteBase>()
+        modelBuilder.Entity<Agente>()
             .HasOne(a => a.CategoriaAgente)
             .WithMany(c => c.Agentes)
             .HasForeignKey(a => a.CategoriaAgenteId)

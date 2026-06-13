@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <script src="https://kit.fontawesome.com/121ef5a672.js" crossorigin="anonymous"></script>
+    <title>Cadastro Usuários</title>
+</head>
+<body>
+    <div id="app">
+        <aside id="sidebar">
+            <div class="brand">AgentMM</div>
+            <nav id="nav">
+                <a onclick="navegarPara('dashboard')" data-page="dashboard" ><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a onclick="navegarPara('chat')" data-page="chat"><i class="fa-regular fa-comment-dots"></i> Chat / Memória</a>
+                <a onclick="navegarPara('agentes')" data-page="agentes" class="active"><i class="fa-solid fa-robot"></i> Agentes</a>
+                <a onclick="navegarPara('categoriaAgente')" data-page="categorias"><i class="fa-solid fa-layer-group"></i> Categorias</a>
+                <a onclick="navegarPara('canais')" data-page="canais"><i class="fa-solid fa-globe"></i> Canais</a>
+                <a onclick="navegarPara('usuarios')" data-page="usuarios"><i class="fa-solid fa-user"></i> Usuários</a>
+            </nav>
+            <div class="user-info">
+            <strong><span id="user-logged">...</span></strong>
+            <span id="profile-logged"></span>
+            <br><br>
+            <a href="#" id="logout-link" style="color:var(--danger);font-size:.8rem">Sair</a>
+            </div>
+        </aside>
+        <main id="main">
+            <div id="page-content" class="container">
+                <div>
+
+                    <section class="card table-section">
+                        <div class="titulo-table">
+                            <h2>Agentes</h2>
+                            <button class="btn btn-primary" onclick="modalAgente()">+ Novo Agente</button>
+                        </div>
+                        <table id="agentes-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Categoria</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="scripts/app.js"></script>
+    <script src="scripts/agentes.js"></script>
+</body>
+</html>

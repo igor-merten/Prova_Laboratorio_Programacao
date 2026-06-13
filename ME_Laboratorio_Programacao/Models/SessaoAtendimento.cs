@@ -14,7 +14,7 @@ public class SessaoAtendimento
 
     // Navegações
     public virtual Usuario Usuario { get; set; } = null!;
-    public virtual AgenteBase Agente { get; set; } = null!;
+    public virtual Agente Agente { get; set; } = null!;
     public virtual CanalOrigem CanalOrigem { get; set; } = null!;
     public virtual ICollection<Mensagem> Mensagens { get; set; } = new List<Mensagem>();
 }

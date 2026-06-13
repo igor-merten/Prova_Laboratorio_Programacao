@@ -7,6 +7,6 @@ public class EstatisticaAcesso : EntidadeBase
     public int TotalSessoes { get; set; } = 0;
     public int TotalMensagens { get; set; } = 0;
 
-    public virtual AgenteBase Agente { get; set; } = null!;
+    public virtual Agente Agente { get; set; } = null!;
     public virtual CanalOrigem CanalOrigem { get; set; } = null!;
 }

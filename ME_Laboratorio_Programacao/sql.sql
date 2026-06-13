@@ -39,15 +39,11 @@ CREATE TABLE "CategoriaAgente" (
 
 CREATE TABLE "Agente" (
     "Id"               SERIAL       PRIMARY KEY,
-    "TipoAgente"       VARCHAR(50)  NOT NULL,   -- 'Padrao' | 'Super'
     "Nome"             VARCHAR(255) NOT NULL,
     "Descricao"        TEXT,
     "CategoriaAgenteId" INT         NOT NULL,
     "Ativo"            BOOLEAN      NOT NULL DEFAULT TRUE,
     "DataCriacao"      TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-
-    CONSTRAINT "CK_Agente_TipoAgente"
-        CHECK ("TipoAgente" IN ('Padrao', 'Super')),
 
     CONSTRAINT "FK_Agente_CategoriaAgente"
         FOREIGN KEY ("CategoriaAgenteId")
@@ -158,11 +154,11 @@ INSERT INTO "CategoriaAgente" ("Nome", "CorHex") VALUES
   ('Financeiro', '#f59e0b'),
   ('RH', '#ec4899');
 
-INSERT INTO "Agente" ("TipoAgente", "Nome", "Descricao", "CategoriaAgenteId", "Ativo") VALUES
-  ('Padrao', 'Agente de Vendas', 'Especialista em conversão de leads', 1, true),
-  ('Super', 'Agente de Suporte', 'Suporte técnico ao cliente', 2, true),
-  ('Super', 'Agente Financeiro', 'Consultas e negociação financeira', 3, true),
-  ('Padrao', 'Agente de RH', 'Recrutamento e gestão de pessoas', 4, true);
+INSERT INTO "Agente" ("Nome", "Descricao", "CategoriaAgenteId", "Ativo") VALUES
+  ('Agente de Vendas', 'Especialista em conversão de leads', 1, true),
+  ('Agente de Suporte', 'Suporte técnico ao cliente', 2, true),
+  ('Agente Financeiro', 'Consultas e negociação financeira', 3, true),
+  ('Agente de RH', 'Recrutamento e gestão de pessoas', 4, true);
 
 INSERT INTO "CanalOrigem" ("Nome", "Ativo") VALUES
   ('Site Principal', true),
@@ -171,7 +167,6 @@ INSERT INTO "CanalOrigem" ("Nome", "Ativo") VALUES
 
 -- CREATE INDEX "IX_Usuarios_PerfilAcessoId"         ON "Usuarios"          ("PerfilAcessoId");
 -- CREATE INDEX "IX_Agente_CategoriaAgenteId"        ON "Agente"            ("CategoriaAgenteId");
--- CREATE INDEX "IX_Agente_TipoAgente"               ON "Agente"            ("TipoAgente");
 -- CREATE INDEX "IX_Sessao_UsuarioId"                ON "SessaoAtendimento" ("UsuarioId");
 -- CREATE INDEX "IX_Sessao_AgenteId"                 ON "SessaoAtendimento" ("AgenteId");
 -- CREATE INDEX "IX_Sessao_CanalOrigemId"            ON "SessaoAtendimento" ("CanalOrigemId");
