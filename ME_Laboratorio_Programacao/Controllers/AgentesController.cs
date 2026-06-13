@@ -23,7 +23,7 @@ public class AgentesController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ListarAgentes()
     {
-        return Ok(await _context.Agentes.Include(a => a.CategoriaAgente).ToListAsync());
+        return Ok(await _context.Agentes.Include(a => a.CategoriaAgente).OrderBy(a => a.Id).ToListAsync());
     }
 
     [HttpPost]

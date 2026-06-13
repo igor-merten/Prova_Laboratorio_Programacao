@@ -21,7 +21,6 @@ async function carregarAgentes() {
 
         agentes.forEach(a => {
             const tr = document.createElement('tr');
-            console.log(a)
             tr.innerHTML = `
                 <td>${a.id}</td>
                 <td>${a.nome}</td>
@@ -39,9 +38,9 @@ async function carregarAgentes() {
                     ${a.ativo ? 'Ativo' : 'Inativo'}
                 </td>
                 <td>
-                    <button class="icon-btn" style="color: #00317C" onclick="prepararEdicao(${a.id}, '${a.nome}', ${a.ativo})"> <i class="fa-solid fa-pen-to-square"></i> <small>Editar </small></button>
+                    <button class="icon-btn" style="color: #00317C" onclick="prepararEdicao(${a.id}, '${a.nome}', '${a.descricao}', ${a.categoriaAgenteId}, ${a.ativo})"> <i class="fa-solid fa-pen-to-square"></i> <small>Editar </small></button>
                     <span class="barrer">|</span>
-                    <button class="icon-btn" style="color: #ca0707" onclick="deletarCanal(${a.id})"><i class="fa-solid fa-trash-can"></i>  <small>Deletar </small></button>
+                    <button class="icon-btn" style="color: #ca0707" onclick="deletarAgente(${a.id})"><i class="fa-solid fa-trash-can"></i>  <small>Deletar </small></button>
                 </td>
             `;
             canaisTableBody.appendChild(tr);
@@ -52,6 +51,7 @@ async function carregarAgentes() {
 }
 
 window.modalAgente = async function (a = null) {
+    console.log(a)
   openModal(`
     <h3>${a ? 'Editar Agente' : 'Novo Agente'}</h3>
     
@@ -71,8 +71,8 @@ window.modalAgente = async function (a = null) {
             <option value="">Selecione uma categoria</option>
             <option value="1" ${a?.categoriaAgenteId == 1 ? 'selected' : ''}>Vendas</option>
             <option value="2" ${a?.categoriaAgenteId == 2 ? 'selected' : ''}>Suporte</option>
-            <option value="1" ${a?.categoriaAgenteId == 3 ? 'selected' : ''}>Financeiro</option>
-            <option value="2" ${a?.categoriaAgenteId == 4 ? 'selected' : ''}>RH</option>
+            <option value="3" ${a?.categoriaAgenteId == 3 ? 'selected' : ''}>Financeiro</option>
+            <option value="4" ${a?.categoriaAgenteId == 4 ? 'selected' : ''}>RH</option>
         </select>
     </div>
 
@@ -86,56 +86,60 @@ window.modalAgente = async function (a = null) {
     
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:15px">
       <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-success" onclick="salvarUsuario(${a?.id ?? 'null'})">Salvar</button>
+      <button class="btn btn-success" onclick="salvarAgente(${a?.id ?? 'null'})">Salvar</button>
     </div>
   `);
 };
 
-window.prepararEdicao = function (id, nome, ativo) {
-    window.modalCanal({ id, nome, ativo });
+window.prepararEdicao = function (id, nome, descricao, categoriaAgenteId, ativo) {
+    window.modalAgente({ id, nome, descricao, categoriaAgenteId, ativo });
 };
 
-// window.salvarUsuario = async function (id = null) {
-//     const nome = document.getElementById('ca-nome').value;
-//     const ativo = document.getElementById('ca-ativo').value === 'true'; 
+window.salvarAgente = async function (id = null) {
+    const nome = document.getElementById('ca-nome').value;
+    const descricao = document.getElementById('ca-descricao').value;
+    const categoriaAgenteId = document.getElementById('ca-categoria').value;
+    const ativo = document.getElementById('ca-ativo').value === 'true'; 
 
-//     const payload = {
-//         nome,
-//         ativo 
-//     };
+    const payload = {
+        nome,
+        descricao,
+        categoriaAgenteId,
+        ativo 
+    };
 
-//     const url = id ? `${API_URL}/canais/${id}` : `${API_URL}/canais`;
-//     const metodo = id ? 'PUT' : 'POST';
+    const url = id ? `${API_URL}/agentes/${id}` : `${API_URL}/agentes`;
+    const metodo = id ? 'PUT' : 'POST';
 
-//     try {
-//         const response = await fetch(url, fetchOptions(metodo, payload));
+    try {
+        const response = await fetch(url, fetchOptions(metodo, payload));
 
-//         if (response.ok) {
-//             alert(id ? 'Canal atualizado com sucesso!' : 'Canal criado com sucesso!');
-//             closeModal();
-//             await carregarCanais(); 
-//         } else {
-//             const erroTxt = await response.text();
-//             alert(`Erro: ${erroTxt}`);
-//         }
-//     } catch (error) {
-//         console.error('Erro ao salvar canal:', error);
-//         alert('Não foi possível salvar o canal.');
-//     }
-// };
+        if (response.ok) {
+            alert(id ? 'Agente atualizado com sucesso!' : 'Agente adicionado com sucesso!');
+            closeModal();
+            await carregarAgentes(); 
+        } else {
+            const erroTxt = await response.text();
+            alert(`Erro: ${erroTxt}`);
+        }
+    } catch (error) {
+        console.error('Erro ao salvar agente:', error);
+        alert('Não foi possível salvar o agente.');
+    }
+};
 
-// async function deletarCanal(id) {
-//     if (!confirm('Deseja realmente excluir este canal?')) return;
+async function deletarAgente(id) {
+    if (!confirm('Deseja realmente excluir este agente?')) return;
 
-//     try {
-//         const response = await fetch(`${API_URL}/canais/${id}`, fetchOptions('DELETE'));
-//         if (response.ok) {
-//             carregarCanais();
-//         } else {
-//             alert('Você não tem permissão para excluir (Apenas Admin).');
-//         }
-//     } catch (error) {
-//         alert('Erro ao tentar deletar.');
-//     }
-// }
+    try {
+        const response = await fetch(`${API_URL}/agentes/${id}`, fetchOptions('DELETE'));
+        if (response.ok) {
+            carregarAgentes();
+        } else {
+            alert('Você não tem permissão para excluir (Apenas Admin).');
+        }
+    } catch (error) {
+        alert('Erro ao tentar deletar.');
+    }
+}
 
