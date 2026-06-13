@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5268/api'; 
+const isLiveServer = window.location.port === '5500' || window.location.port === '5501';
+const API_URL = isLiveServer ? 'http://localhost:5268/api' : '/api';
 
 const loginForm = document.getElementById('login-form');
 const loginErro = document.getElementById('login-erro');
