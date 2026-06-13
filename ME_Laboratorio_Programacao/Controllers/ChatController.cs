@@ -33,7 +33,7 @@ namespace ME_Laboratorio_Programacao.Controllers
             var usuarioId = GetUsuarioId();
             
             var sessaoAberta = await _context.SessoesAtendimento
-                .FirstOrDefaultAsync(s => s.UsuarioId == usuarioId && s.AgenteId == request.AgenteId && s.Status == "Aberta");
+                .FirstOrDefaultAsync(s => s.UsuarioId == usuarioId && s.AgenteId == request.AgenteId && s.CanalOrigemId == request.CanalOrigemId && s.Status == "Aberta");
                 
             if (sessaoAberta != null)
                 return Ok(new { sessaoId = sessaoAberta.Id });
@@ -48,6 +48,21 @@ namespace ME_Laboratorio_Programacao.Controllers
 
             _context.SessoesAtendimento.Add(novaSessao);
             await _context.SaveChangesAsync();
+
+            var memoria = await _context.ContextosMemoria
+                .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId && c.AgenteId == request.AgenteId);
+
+            if (memoria != null && !string.IsNullOrEmpty(memoria.Resumo))
+            {
+                var msgMemoria = new Mensagem{
+                    SessaoAtendimentoId = novaSessao.Id,
+                    Remetente = "Agente",
+                    Conteudo = $"[Memória do Agente] Olá novamente! De acordo com meus registros, nosso último assunto foi: {memoria.Resumo}. Como posso continuar te ajudando hoje?",
+                    EnviadaEm = DateTime.UtcNow
+                };
+                _context.Mensagens.Add(msgMemoria);
+                await _context.SaveChangesAsync();
+            }
 
             return Ok(new { sessaoId = novaSessao.Id });
         }
@@ -154,6 +169,34 @@ namespace ME_Laboratorio_Programacao.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { mensagem = respostaGerada, remetente = "Agente" });
+        }
+        [HttpDelete("{sessaoId}")]
+        public async Task<IActionResult> DeletarSessao(int sessaoId)
+        {
+            var usuarioId = GetUsuarioId();
+            var sessao = await _context.SessoesAtendimento
+                .FirstOrDefaultAsync(s => s.Id == sessaoId && s.UsuarioId == usuarioId);
+
+            if (sessao == null) return NotFound("Sessão não encontrada");
+
+            var memoria = await _context.ContextosMemoria
+                .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId && c.AgenteId == sessao.AgenteId);
+            
+            if (memoria != null) {
+                _context.ContextosMemoria.Remove(memoria);
+            }
+
+            _context.SessoesAtendimento.Remove(sessao);
+            await _context.SaveChangesAsync();
+
+            // Regra especial: se deletou a última sessão, reseta a contagem do banco para começar do 1 novamente
+            var temSessoes = await _context.SessoesAtendimento.AnyAsync();
+            if (!temSessoes)
+            {
+                await _context.Database.ExecuteSqlRawAsync("ALTER SEQUENCE \"SessaoAtendimento_Id_seq\" RESTART WITH 1");
+            }
+
+            return Ok("Sessão e histórico deletados com sucesso!");
         }
     }
 }

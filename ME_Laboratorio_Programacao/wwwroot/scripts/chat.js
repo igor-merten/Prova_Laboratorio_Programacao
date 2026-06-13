@@ -48,8 +48,8 @@ async function carregarSessoes() {
                                 <strong><i class="fa-solid fa-comments" style="color:#94a3b8; margin-right:5px;"></i> Sessão #${s.id}</strong>
                                 <span style="font-size:11px; color:#94a3b8;">${new Date(s.dataInicio).toLocaleDateString()}</span>
                              </div>
-                             <small style="color:#64748b; display:block; margin-top:3px;">${s.agenteNome}</small>`;
-            div.onclick = () => abrirSessao(s.id, s.agenteNome);
+                             <small style="color:#64748b; display:block; margin-top:3px;">${s.agenteNome} (${s.canalNome})</small>`;
+            div.onclick = () => abrirSessao(s.id, s.agenteNome, s.canalNome);
             lista.appendChild(div);
         });
     } catch (e) {
@@ -71,14 +71,18 @@ async function iniciarSessao() {
         if (res.ok) {
             const data = await res.json();
             await carregarSessoes();
-            abrirSessao(data.sessaoId, "Agente");
+            const agenteSelect = document.getElementById('chat-agente');
+            const canalSelect = document.getElementById('chat-canal');
+            const nomeAgente = agenteSelect.options[agenteSelect.selectedIndex].text;
+            const nomeCanal = canalSelect.options[canalSelect.selectedIndex].text;
+            abrirSessao(data.sessaoId, nomeAgente, nomeCanal);
         }
     } catch (e) {
         console.error(e);
     }
 }
 
-async function abrirSessao(id, nomeAgente) {
+async function abrirSessao(id, nomeAgente, nomeCanal) {
     sessaoAtualId = id;
     
     // Atualiza o CSS de ativo na sidebar
@@ -86,8 +90,9 @@ async function abrirSessao(id, nomeAgente) {
     const item = document.getElementById(`sessao-${id}`);
     if(item) item.classList.add('active');
 
-    document.getElementById('header-text').innerText = `Sessão #${id} - Conversando com ${nomeAgente}`;
+    document.getElementById('header-text').innerText = `Sessão #${id} - ${nomeAgente} (${nomeCanal})`;
     document.getElementById('status-dot').style.background = '#22c55e'; // Verde para online
+    document.getElementById('btn-deletar-sessao').classList.remove('hidden');
     document.getElementById('chat-input').disabled = false;
     document.getElementById('chat-send-btn').disabled = false;
     document.getElementById('chat-input').focus();
@@ -145,6 +150,29 @@ async function enviarMensagem() {
             alert('Erro ao enviar mensagem');
         }
     } catch (e) {
+        console.error(e);
+    }
+}
+
+async function deletarSessao() {
+    if(!sessaoAtualId) return;
+    if(!confirm("Tem certeza que deseja apagar esta conversa e limpar a memória do Agente?")) return;
+    
+    try {
+        const res = await fetch(`${API_URL}/chat/${sessaoAtualId}`, fetchOptions('DELETE'));
+        if(res.ok) {
+            sessaoAtualId = null;
+            document.getElementById('chat-messages').innerHTML = '';
+            document.getElementById('header-text').innerText = 'Selecione ou inicie uma sessão de chat';
+            document.getElementById('status-dot').style.background = '#94a3b8';
+            document.getElementById('btn-deletar-sessao').classList.add('hidden');
+            document.getElementById('chat-input').disabled = true;
+            document.getElementById('chat-send-btn').disabled = true;
+            await carregarSessoes();
+        } else {
+            alert('Erro ao deletar sessão.');
+        }
+    } catch(e){
         console.error(e);
     }
 }
