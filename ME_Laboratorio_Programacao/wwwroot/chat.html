@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style/style.css">
+  <script src="https://kit.fontawesome.com/121ef5a672.js" crossorigin="anonymous"></script>
+  <title>Chat com Agente</title>
+  <style>
+    /* Estilos Premium para o Chat */
+    #page-content {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        padding: 20px;
+        min-height: 0; /* IMPEDIR QUE A TELA CRESÇA DEMAIS */
+        background: linear-gradient(135deg, #f0f4fd 0%, #f1f5f9 100%);
+    }
+
+    .chat-sidebar-card {
+        width: 320px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        margin-bottom: 0;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+    }
+
+    .chat-main-card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0;
+        padding: 0;
+        overflow: hidden;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        background: white;
+    }
+
+    #chat-messages {
+        flex: 1;
+        padding: 25px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        /* Fundo claro e moderno estilo app de mensagem */
+        background-color: #f8fafc;
+        background-image: radial-gradient(#e2e8f0 1px, transparent 0);
+        background-size: 20px 20px;
+    }
+
+    .chat-bubble {
+        padding: 12px 18px;
+        border-radius: 20px;
+        font-size: 14.5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        animation: fadeIn 0.3s ease-out;
+        max-width: 70%;
+        width: fit-content;
+        word-break: break-word;
+    }
+
+    .chat-bubble.user {
+        background: linear-gradient(135deg, #4f46e5, #3b82f6);
+        border-bottom-right-radius: 4px;
+        color: white;
+        align-self: flex-end;
+    }
+
+    .chat-bubble.agent {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-bottom-left-radius: 4px;
+        color: #1e293b;
+        align-self: flex-start;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sessao-item {
+        padding: 12px 15px;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        background: #f8fafc;
+        transition: all 0.2s;
+        margin-bottom: 8px;
+    }
+    
+    .sessao-item:hover {
+        background: #fff;
+        border-color: #cbd5e1;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        transform: translateY(-1px);
+    }
+
+    .sessao-item.active {
+        background: #eff6ff;
+        border-color: #bfdbfe;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <aside id="sidebar">
+      <div class="brand">AgentMM</div>
+      <nav id="nav">
+        <a onclick="navegarPara('dashboard')" data-page="dashboard" ><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a onclick="navegarPara('chat')" data-page="chat" class="active"><i class="fa-regular fa-comment-dots"></i> Chat / Memória</a>
+        <a onclick="navegarPara('agentes')" data-page="agentes"><i class="fa-solid fa-robot"></i> Agentes</a>
+        <a onclick="navegarPara('categoriaAgente')" data-page="categorias"><i class="fa-solid fa-layer-group"></i> Categorias</a>
+        <a onclick="navegarPara('canais')" data-page="canais"><i class="fa-solid fa-globe"></i> Canais</a>
+        <a onclick="navegarPara('usuarios')" data-page="usuarios"><i class="fa-solid fa-user"></i> Usuários</a>
+      </nav>
+      <div class="user-info">
+        <strong id="user-logged">Usuário</strong>
+        <span id="user-perfil">Perfil</span>
+        <br><br>
+        <a href="#" id="logout-link" style="color:var(--danger);font-size:.8rem">Sair</a>
+      </div>
+    </aside>
+
+    <main id="main">
+      <div id="page-content">
+        
+        <!-- Configuração da Sessão -->
+        <div class="card chat-sidebar-card">
+          <h3 style="margin-top:0; font-size: 1.2rem; color: #1e293b;"><i class="fa-solid fa-plus-circle"></i> Nova Sessão</h3>
+          <div class="form-group">
+            <label style="color: #475569;">Escolha o Agente</label>
+            <select id="chat-agente" style="background:#f8fafc; border-color:#e2e8f0;"></select>
+          </div>
+          <div class="form-group">
+            <label style="color: #475569;">Canal de Origem</label>
+            <select id="chat-canal" style="background:#f8fafc; border-color:#e2e8f0;"></select>
+          </div>
+          <button class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; border-radius:10px; margin-top:5px;" onclick="iniciarSessao()">Iniciar Chat</button>
+          
+          <hr style="margin: 25px 0; border: 0; border-top: 1px dashed #cbd5e1;">
+          
+          <h3 style="font-size: 1.1rem; color: #1e293b; margin-bottom: 15px;"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</h3>
+          <div id="lista-sessoes" style="overflow-y: auto; flex:1; padding-right:5px;">
+             <!-- Sessões do usuario -->
+          </div>
+        </div>
+
+        <!-- Janela de Chat -->
+        <div class="card chat-main-card">
+            <div id="chat-header" style="padding: 20px 25px; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); border-bottom: 1px solid #e2e8f0; font-weight:600; color: #334155; display:flex; align-items:center; gap:10px;">
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #94a3b8;" id="status-dot"></div>
+                <span id="header-text">Selecione ou inicie uma sessão de chat</span>
+            </div>
+            
+            <div id="chat-messages">
+                <!-- Bolhas de mensagem entrarão aqui -->
+            </div>
+
+            <div style="padding: 20px 25px; border-top: 1px solid #e2e8f0; background: white; display:flex; gap:15px; align-items:center;">
+                <input type="text" id="chat-input" placeholder="Escreva sua mensagem aqui..." style="flex:1; border:1px solid #e2e8f0; padding:15px 20px; border-radius:30px; background:#f8fafc; font-size:15px; outline:none; transition: all 0.2s;" onfocus="this.style.borderColor='#3b82f6'; this.style.background='white';" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';" disabled onkeypress="if(event.key === 'Enter') enviarMensagem()">
+                <button id="chat-send-btn" class="btn btn-primary" style="border-radius:50%; width:50px; height:50px; padding:0; display:flex; align-items:center; justify-content:center; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="enviarMensagem()" disabled>
+                    <i class="fa-solid fa-paper-plane" style="margin-left:-2px;"></i>
+                </button>
+            </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/chat.js"></script>
+</body>
+</html>

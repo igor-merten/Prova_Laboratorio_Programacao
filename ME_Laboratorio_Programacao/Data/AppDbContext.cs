@@ -78,5 +78,17 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<CanalOrigem>()
             .ToTable("CanalOrigem");
+
+        modelBuilder.Entity<SessaoAtendimento>()
+            .ToTable("SessaoAtendimento");
+
+        modelBuilder.Entity<Mensagem>()
+            .ToTable("Mensagem");
+
+        modelBuilder.Entity<ContextoMemoria>()
+            .ToTable("ContextoMemoria");
+
+        modelBuilder.Entity<EstatisticaAcesso>()
+            .ToTable("EstatisticaAcesso");
     }
 }
