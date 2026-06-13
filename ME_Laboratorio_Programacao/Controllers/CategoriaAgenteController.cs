@@ -1,4 +1,4 @@
-﻿using ME_Laboratorio_Programacao.Data;
+using ME_Laboratorio_Programacao.Data;
 using ME_Laboratorio_Programacao.DTOs;
 using ME_Laboratorio_Programacao.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +33,7 @@ public class CategoriaAgenteController : ControllerBase
         var categoria = new CategoriaAgente { Nome = request.Nome, CorHex = request.CorHex };
         _context.CategoriaAgentes.Add(categoria);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(ListarCategorias), new { id = categoria.Id }, categoria);
+        return Ok(categoria);
     }
 
     [HttpPut("categorias/{id}")]
@@ -47,7 +47,7 @@ public class CategoriaAgenteController : ControllerBase
         categoria.CorHex = request.CorHex;
 
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok("Categoria atualizada com sucesso!");
     }
 
     [HttpDelete("categorias/{id}")]
@@ -59,7 +59,7 @@ public class CategoriaAgenteController : ControllerBase
 
         _context.CategoriaAgentes.Remove(categoria);
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok("Categoria deletada com sucesso!");
     }
 
 }

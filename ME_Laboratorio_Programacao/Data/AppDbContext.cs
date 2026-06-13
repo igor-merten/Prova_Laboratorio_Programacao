@@ -1,4 +1,4 @@
-﻿using ME_Laboratorio_Programacao.Models;
+using ME_Laboratorio_Programacao.Models;
 using ME_Laboratorio_Programacao.Models.Mensagens;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -78,58 +78,5 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<CanalOrigem>()
             .ToTable("CanalOrigem");
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        ProcessarAuditoria();
-        return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    private void ProcessarAuditoria()
-    {
-        ChangeTracker.DetectChanges();
-
-        var httpContext = _httpContextAccessor.HttpContext;
-        int? usuarioIdLogado = null;
-
-        var idClaim = httpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (int.TryParse(idClaim, out int id))
-        {
-            usuarioIdLogado = id;
-        }
-
-        foreach (var entry in ChangeTracker.Entries().ToList())
-        {
-            // Evita loop infinito ignorando alterações na própria tabela de Log
-            if (entry.Entity is LogAuditoria || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
-                continue;
-
-            // Filtro para monitorar apenas a tabela de Usuários
-            //if (entry.Entity is not Usuario)
-            //    continue;
-
-            string acao = entry.State switch
-            {
-                EntityState.Added => "Cadastrar",
-                EntityState.Modified => "Editar",
-                EntityState.Deleted => "Deletar",
-                _ => "Desconhecida"
-            };
-
-            var nomeEntidade = entry.Entity.GetType().Name;
-            if (nomeEntidade.Contains("Proxy"))
-                nomeEntidade = entry.Entity.GetType().BaseType?.Name ?? nomeEntidade;
-
-            // --- CRIA O LOG ---
-            var log = new LogAuditoria
-            {
-                UsuarioId = usuarioIdLogado,
-                Acao = $"{acao} {nomeEntidade}",
-                Entidade = nomeEntidade
-            };
-
-            LogsAuditoria.Add(log);
-        }
     }
 }

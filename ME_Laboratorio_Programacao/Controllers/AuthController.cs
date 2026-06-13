@@ -1,9 +1,11 @@
-﻿using ME_Laboratorio_Programacao.Data;
+using ME_Laboratorio_Programacao.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ME_Laboratorio_Programacao.DTOs;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ME_Laboratorio_Programacao.Controllers;
 
@@ -25,9 +27,11 @@ public class AuthController : ControllerBase
             .Include(u => u.PerfilAcesso)
             .FirstOrDefaultAsync(u => u.Email == request.Email);
 
-        if (usuario == null || !usuario.Ativo || !BCrypt.Net.BCrypt.Verify(request.Senha, usuario.Senha))
+        var hashSenha = GerarHashMd5(request.Senha);
+
+        if (usuario == null || !usuario.Ativo || usuario.Senha != hashSenha)
         {
-            return Unauthorized(new { mensagem = "E-mail ou senha inválidos." });
+            return Unauthorized("E-mail ou senha inválidos.");
         }
 
         var claims = new List<Claim>
@@ -41,7 +45,6 @@ public class AuthController : ControllerBase
         var identity = new ClaimsIdentity(claims, "CookieAuth");
         var principal = new ClaimsPrincipal(identity);
 
-        // Configura o cookie para ser acessível de forma segura pelo navegador
         await HttpContext.SignInAsync("CookieAuth", principal, new AuthenticationProperties
         {
             IsPersistent = true,
@@ -56,5 +59,15 @@ public class AuthController : ControllerBase
     {
         await HttpContext.SignOutAsync("CookieAuth");
         return Ok(new { mensagem = "Logout realizado com sucesso" });
+    }
+
+    private string GerarHashMd5(string input)
+    {
+        using (MD5 md5 = MD5.Create())
+        {
+            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
+            byte[] hashBytes = md5.ComputeHash(inputBytes);
+            return Convert.ToHexString(hashBytes);
+        }
     }
 }

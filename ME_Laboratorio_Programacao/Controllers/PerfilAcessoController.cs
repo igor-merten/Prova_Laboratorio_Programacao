@@ -1,4 +1,4 @@
-﻿// Controllers/PerfilAcessoController.cs
+// Controllers/PerfilAcessoController.cs
 using ME_Laboratorio_Programacao.Data;
 using ME_Laboratorio_Programacao.DTOs;
 using ME_Laboratorio_Programacao.Models;
@@ -10,7 +10,7 @@ namespace ME_Laboratorio_Programacao.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin")] // Apenas administradores gerenciam perfis de acesso
+[Authorize(Roles = "Admin")]
 public class PerfilAcessoController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -21,7 +21,7 @@ public class PerfilAcessoController : ControllerBase
     }
 
     [HttpGet]
-    [AllowAnonymous] // Permite que a tela de cadastro ou filtros do front busquem os perfis
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll() => Ok(await _context.PerfilAcessos.ToListAsync());
 
     [HttpPost]
@@ -30,7 +30,7 @@ public class PerfilAcessoController : ControllerBase
         var perfil = new PerfilAcesso { Nome = request.Nome, Descricao = request.Descricao };
         _context.PerfilAcessos.Add(perfil);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetAll), new { id = perfil.Id }, perfil);
+        return Ok(perfil);
     }
 
     [HttpPut("{id}")]
@@ -43,7 +43,7 @@ public class PerfilAcessoController : ControllerBase
         perfil.Descricao = request.Descricao;
 
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok("Perfil atualizado");
     }
 
     [HttpDelete("{id}")]
@@ -54,6 +54,6 @@ public class PerfilAcessoController : ControllerBase
 
         _context.PerfilAcessos.Remove(perfil);
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok("Perfil deletado");
     }
 }

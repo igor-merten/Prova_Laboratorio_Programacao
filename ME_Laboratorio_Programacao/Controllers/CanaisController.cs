@@ -1,4 +1,4 @@
-﻿using ME_Laboratorio_Programacao.Data;
+using ME_Laboratorio_Programacao.Data;
 using ME_Laboratorio_Programacao.DTOs;
 using ME_Laboratorio_Programacao.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +33,7 @@ public class CanaisController : ControllerBase
         var canal = new CanalOrigem { Nome = request.Nome, Ativo = request.Ativo };
         _context.CanaisOrigem.Add(canal);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(ListarCanais), new { id = canal.Id }, canal);
+        return Ok(canal);
     }
 
     [HttpPut("{id}")]
@@ -47,7 +47,7 @@ public class CanaisController : ControllerBase
         canal.Ativo = request.Ativo;
 
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok("Canal atualizado com sucesso!");
     }
 
     [HttpDelete("{id}")]
@@ -59,7 +59,7 @@ public class CanaisController : ControllerBase
 
         _context.CanaisOrigem.Remove(canal);
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok("Canal deletado com sucesso!");
     }
 
 }

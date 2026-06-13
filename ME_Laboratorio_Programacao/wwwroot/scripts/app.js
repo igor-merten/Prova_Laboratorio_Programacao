@@ -1,4 +1,4 @@
-const API_URL = 'https://localhost:7194/api';
+const API_URL = 'http://localhost:5268/api';
 
 const btnLogout = document.getElementById('logout-link');
 const userLoggedSpan = document.getElementById('user-logged');

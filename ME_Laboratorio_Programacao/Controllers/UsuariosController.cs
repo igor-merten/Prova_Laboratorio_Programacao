@@ -1,16 +1,18 @@
-﻿// Controllers/UsuariosController.cs
+// Controllers/UsuariosController.cs
 using ME_Laboratorio_Programacao.Data;
 using ME_Laboratorio_Programacao.DTOs;
 using ME_Laboratorio_Programacao.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ME_Laboratorio_Programacao.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize] // Bloqueia acesso sem cookie por padrão
+[Authorize]
 public class UsuariosController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -33,7 +35,7 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")] // Apenas Admin cria novos usuários
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] UsuarioCreateRequest request)
     {
         if (await _context.Usuarios.AnyAsync(u => u.Email == request.Email))
@@ -43,14 +45,14 @@ public class UsuariosController : ControllerBase
         {
             Nome = request.Nome,
             Email = request.Email,
-            Senha = BCrypt.Net.BCrypt.HashPassword(request.Senha), // Criptografia BCrypt
+            Senha = GerarHashMd5(request.Senha),
             PerfilAcessoId = request.PerfilAcessoId
         };
 
         _context.Usuarios.Add(usuario);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetAll), new { id = usuario.Id }, new { usuario.Id, usuario.Nome });
+        return Ok(usuario);
     }
 
     [HttpPut("{id}")]
@@ -66,11 +68,11 @@ public class UsuariosController : ControllerBase
 
         if (!string.IsNullOrWhiteSpace(request.Senha))
         {
-            usuario.Senha = BCrypt.Net.BCrypt.HashPassword(request.Senha);
+            usuario.Senha = GerarHashMd5(request.Senha);
         }
 
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok("Usuário atualizado");
     }
 
     [HttpDelete("{id}")]
@@ -82,6 +84,16 @@ public class UsuariosController : ControllerBase
 
         _context.Usuarios.Remove(usuario);
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok("Usuário deletado");
+    }
+
+    private string GerarHashMd5(string input)
+    {
+        using (MD5 md5 = MD5.Create())
+        {
+            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
+            byte[] hashBytes = md5.ComputeHash(inputBytes);
+            return Convert.ToHexString(hashBytes);
+        }
     }
 }
