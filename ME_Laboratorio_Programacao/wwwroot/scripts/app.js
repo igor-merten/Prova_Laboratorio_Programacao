@@ -16,7 +16,6 @@ const fetchOptions = (method, body = null) => {
 };
 
 
-// EXECUTA AO CARREGAR A PÁGINA
 document.addEventListener('DOMContentLoaded', () => {
     const nomeSalvo = localStorage.getItem('usuarioNome');
     const perfilSalvo = localStorage.getItem('perfil');

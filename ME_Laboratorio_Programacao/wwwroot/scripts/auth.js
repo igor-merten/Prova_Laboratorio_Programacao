@@ -27,11 +27,8 @@ loginForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            // Guarda o nome do usuário para usar na tela de dashboard
             localStorage.setItem('usuarioNome', data.usuario);
             localStorage.setItem('perfil', data.perfil);
-            
-            // Redireciona o navegador para a página de usuários
             window.location.href = '../usuarios.html';
         } else {
             loginErro.innerText = data.mensagem || 'Falha na autenticação.';
