@@ -18,25 +18,25 @@ public class DashboardController : ControllerBase
 
     [HttpGet("estatisticas")]
     public async Task<IActionResult> ObterEstatisticas() {
-        var totalSessoes = await _context.SessoesAtendimento.CountAsync();
-        var totalMensagens = await _context.Mensagens.CountAsync();
-        var mensagensPorAgente = await _context.Mensagens
-            .Include(m => m.SessaoAtendimento)
-            .ThenInclude(s => s.Agente)
-            .GroupBy(m => m.SessaoAtendimento.Agente.Nome)
-            .Select(g => new { Agente = g.Key, Total = g.Count() })
+        var totalSessoes = await _context.EstatisticasAcesso.SumAsync(e => e.TotalSessoes);
+        var totalMensagens = await _context.EstatisticasAcesso.SumAsync(e => e.TotalMensagens);
+
+        var mensagensPorAgente = await _context.EstatisticasAcesso
+            .Include(e => e.Agente)
+            .GroupBy(e => e.Agente.Nome)
+            .Select(g => new { Agente = g.Key, Total = g.Sum(e => e.TotalMensagens) })
             .ToListAsync();
 
-        var sessoesPorCanal = await _context.SessoesAtendimento
-            .Include(s => s.CanalOrigem)
-            .GroupBy(s => s.CanalOrigem.Nome)
-            .Select(g => new { Canal = g.Key, Total = g.Count() })
+        var sessoesPorCanal = await _context.EstatisticasAcesso
+            .Include(e => e.CanalOrigem)
+            .GroupBy(e => e.CanalOrigem.Nome)
+            .Select(g => new { Canal = g.Key, Total = g.Sum(e => e.TotalSessoes) })
             .ToListAsync();
 
-        var sessoesPorAgente = await _context.SessoesAtendimento
-            .Include(s => s.Agente)
-            .GroupBy(s => s.Agente.Nome)
-            .Select(g => new { Agente = g.Key, Total = g.Count() })
+        var sessoesPorAgente = await _context.EstatisticasAcesso
+            .Include(e => e.Agente)
+            .GroupBy(e => e.Agente.Nome)
+            .Select(g => new { Agente = g.Key, Total = g.Sum(e => e.TotalSessoes) })
             .ToListAsync();
 
         return Ok(new {

@@ -13,14 +13,11 @@ async function carregarEstatisticas() {
             const data = await res.json();
             document.getElementById('kpi-sessoes').innerText = data.totalSessoes;
             document.getElementById('kpi-mensagens').innerText = data.totalMensagens;
-
-            // Media
+            
             const media = data.totalSessoes > 0 ? (data.totalMensagens / data.totalSessoes).toFixed(1) : 0;
             document.getElementById('kpi-media').innerText = media;
-
-            // Agente mais usado
-            if (data.sessoesPorAgente && data.sessoesPorAgente.length > 0) {
-                const topAgente = data.sessoesPorAgente.reduce((max, obj) => obj.total > max.total ? obj : max);
+            if (data.mensagensPorAgente && data.mensagensPorAgente.length > 0) {
+                const topAgente = data.mensagensPorAgente.reduce((max, obj) => obj.total > max.total ? obj : max);
                 document.getElementById('kpi-top-agente').innerText = topAgente.agente;
             }
 

@@ -49,6 +49,22 @@ namespace ME_Laboratorio_Programacao.Controllers
             _context.SessoesAtendimento.Add(novaSessao);
             await _context.SaveChangesAsync();
 
+            var estatistica = await _context.EstatisticasAcesso
+                .FirstOrDefaultAsync(e => e.AgenteId == request.AgenteId && e.CanalOrigemId == request.CanalOrigemId);
+            if (estatistica == null)
+            {
+                _context.EstatisticasAcesso.Add(new EstatisticaAcesso {
+                    AgenteId = request.AgenteId,
+                    CanalOrigemId = request.CanalOrigemId,
+                    TotalSessoes = 1,
+                    TotalMensagens = 0
+                });
+            }
+            else
+            {
+                estatistica.TotalSessoes += 1;
+            }
+
             var memoria = await _context.ContextosMemoria
                 .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId && c.AgenteId == request.AgenteId);
 
@@ -61,8 +77,9 @@ namespace ME_Laboratorio_Programacao.Controllers
                     EnviadaEm = DateTime.UtcNow
                 };
                 _context.Mensagens.Add(msgMemoria);
-                await _context.SaveChangesAsync();
             }
+            
+            await _context.SaveChangesAsync();
 
             return Ok(new { sessaoId = novaSessao.Id });
         }
@@ -150,6 +167,13 @@ namespace ME_Laboratorio_Programacao.Controllers
             };
             _context.Mensagens.Add(msgAgente);
 
+            var estatistica = await _context.EstatisticasAcesso
+                .FirstOrDefaultAsync(e => e.AgenteId == sessao.AgenteId && e.CanalOrigemId == sessao.CanalOrigemId);
+            if (estatistica != null)
+            {
+                estatistica.TotalMensagens += 2;
+            }
+
             var contexto = await _context.ContextosMemoria
                 .FirstOrDefaultAsync(c => c.UsuarioId == sessao.UsuarioId && c.AgenteId == sessao.AgenteId);
             
@@ -186,10 +210,20 @@ namespace ME_Laboratorio_Programacao.Controllers
                 _context.ContextosMemoria.Remove(memoria);
             }
 
+            var qtdMensagens = await _context.Mensagens.CountAsync(m => m.SessaoAtendimentoId == sessaoId);
+            var estatistica = await _context.EstatisticasAcesso
+                .FirstOrDefaultAsync(e => e.AgenteId == sessao.AgenteId && e.CanalOrigemId == sessao.CanalOrigemId);
+            
+            if (estatistica != null)
+            {
+                estatistica.TotalSessoes -= 1;
+                estatistica.TotalMensagens -= qtdMensagens;
+                if (estatistica.TotalSessoes < 0) estatistica.TotalSessoes = 0;
+                if (estatistica.TotalMensagens < 0) estatistica.TotalMensagens = 0;
+            }
+
             _context.SessoesAtendimento.Remove(sessao);
             await _context.SaveChangesAsync();
-
-            // Regra especial: se deletou a última sessão, reseta a contagem do banco para começar do 1 novamente
             var temSessoes = await _context.SessoesAtendimento.AnyAsync();
             if (!temSessoes)
             {
