@@ -8,14 +8,13 @@
   <script src="https://kit.fontawesome.com/121ef5a672.js" crossorigin="anonymous"></script>
   <title>Chat com Agente</title>
   <style>
-    /* Estilos Premium para o Chat */
     #page-content {
         flex: 1;
         display: flex;
         flex-direction: row;
         gap: 20px;
         padding: 20px;
-        min-height: 0; /* IMPEDIR QUE A TELA CRESÇA DEMAIS */
+        min-height: 0;
         background: linear-gradient(135deg, #f0f4fd 0%, #f1f5f9 100%);
     }
 
@@ -52,7 +51,6 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
-        /* Fundo claro e moderno estilo app de mensagem */
         background-color: #f8fafc;
         background-image: radial-gradient(#e2e8f0 1px, transparent 0);
         background-size: 20px 20px;
@@ -135,8 +133,6 @@
 
     <main id="main">
       <div id="page-content">
-        
-        <!-- Configuração da Sessão -->
         <div class="card chat-sidebar-card">
           <h3 style="margin-top:0; font-size: 1.2rem; color: #1e293b;"><i class="fa-solid fa-plus-circle"></i> Nova Sessão</h3>
           <div class="form-group">
@@ -153,11 +149,9 @@
           
           <h3 style="font-size: 1.1rem; color: #1e293b; margin-bottom: 15px;"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</h3>
           <div id="lista-sessoes" style="overflow-y: auto; flex:1; padding-right:5px;">
-             <!-- Sessões do usuario -->
           </div>
         </div>
 
-        <!-- Janela de Chat -->
         <div class="card chat-main-card">
             <div id="chat-header" style="padding: 20px 25px; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); border-bottom: 1px solid #e2e8f0; font-weight:600; color: #334155; display:flex; align-items:center; justify-content:space-between;">
                 <div style="display:flex; align-items:center; gap:10px;">
@@ -170,7 +164,6 @@
             </div>
             
             <div id="chat-messages">
-                <!-- Bolhas de mensagem entrarão aqui -->
             </div>
 
             <div style="padding: 20px 25px; border-top: 1px solid #e2e8f0; background: white; display:flex; gap:15px; align-items:center;">

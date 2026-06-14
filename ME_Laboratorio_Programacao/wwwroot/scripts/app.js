@@ -31,8 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-// 4. EVENTO DE LOGOUT
 if (btnLogout) {
     btnLogout.onclick = async (e) => {
         e.preventDefault();
@@ -46,18 +44,15 @@ if (btnLogout) {
     };
 }
 
-// Limpa os dados locais e joga para o index
 function efetuarLogoutLocal() {
     localStorage.removeItem('usuarioNome');
     window.location.href = '../index.html';
 }
 
-// navegacao
 function navegarPara(pagina) {
     window.location.href = `${pagina}.html`;
 }
 
-// modal
 function openModal(html) {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';

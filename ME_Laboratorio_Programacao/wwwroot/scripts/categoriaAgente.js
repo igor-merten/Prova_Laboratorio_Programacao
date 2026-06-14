@@ -25,8 +25,6 @@ window.salvarCategoria = async function (id = null) {
     }
 
     const payload = { nome, corHex };
-    
-    // Define a estratégia baseada na existência do ID
     const url = id ? `${API_URL}/categoriaagente/categorias/${id}` : `${API_URL}/categoriaagente/categorias`;
     const metodo = id ? 'PUT' : 'POST';
 
@@ -63,7 +61,6 @@ window.deletarCategoria = async function (id) {
 
 async function carregarCategorias() {
     try {
-        // Altere para a rota exata definida no seu Controller .NET (ex: /categoriaagentes ou /categorias)
         const response = await fetch(`${API_URL}/categoriaagente/categorias`, fetchOptions('GET'));
         
         if (response.status === 401 || response.status === 403) {

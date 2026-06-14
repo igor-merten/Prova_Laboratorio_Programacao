@@ -14,7 +14,6 @@ const fetchOptions = (method, body = null) => {
     return config;
 };
 
-// 1. EVENTO DE LOGIN
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     loginErro.innerText = '';

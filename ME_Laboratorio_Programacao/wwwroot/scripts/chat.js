@@ -84,8 +84,6 @@ async function iniciarSessao() {
 
 async function abrirSessao(id, nomeAgente, nomeCanal) {
     sessaoAtualId = id;
-    
-    // Atualiza o CSS de ativo na sidebar
     document.querySelectorAll('.sessao-item').forEach(el => el.classList.remove('active'));
     const item = document.getElementById(`sessao-${id}`);
     if(item) item.classList.add('active');
@@ -132,8 +130,6 @@ async function enviarMensagem() {
     const input = document.getElementById('chat-input');
     const texto = input.value.trim();
     if (!texto || !sessaoAtualId) return;
-
-    // Adiciona na tela instantaneamente
     adicionarBolhaMensagem(texto, true);
     input.value = '';
 
