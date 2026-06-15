@@ -145,8 +145,8 @@ INSERT INTO "PerfilAcesso" ("Nome", "Descricao") VALUES
   ('Operador', 'Acesso ao painel e chat');
 
 INSERT INTO "Usuarios" ("Nome", "Email", "Senha", "Ativo", "PerfilAcessoId") VALUES
-  ('Administrador', 'admin@teste.com', '$2a$11$RtiDLb20u3bYdbp5bSBe1OR7XCV4r8b5ROdQgnQmAFSA/q8xiwgnS', true, 1),
-  ('Operador', 'operador@teste.com', '$2a$11$RtiDLb20u3bYdbp5bSBe1OR7XCV4r8b5ROdQgnQmAFSA/q8xiwgnS', true, 2);
+  ('Administrador', 'admin@teste.com', 'E10ADC3949BA59ABBE56E057F20F883E', true, 1),
+  ('Operador', 'operador@teste.com', 'E10ADC3949BA59ABBE56E057F20F883E', true, 2);
 
 INSERT INTO "CategoriaAgente" ("Nome", "CorHex") VALUES
   ('Vendas', '#6366f1'),
