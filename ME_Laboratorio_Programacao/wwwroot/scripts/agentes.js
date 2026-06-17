@@ -107,10 +107,25 @@ window.salvarAgente = async function (id = null) {
     const categoriaAgenteId = document.getElementById('ca-categoria').value;
     const ativo = document.getElementById('ca-ativo').value === 'true'; 
 
+    if (!nome.trim()) {
+        alert("Por favor, preencha o Nome.");
+        return;
+    }
+
+    if (!categoriaAgenteId) {
+        alert("Por favor, selecione uma Categoria.");
+        return;
+    }
+
+    if (!descricao.trim()) {
+        alert("Por favor, preencha a Descrição.");
+        return;
+    }
+
     const payload = {
         nome,
         descricao,
-        categoriaAgenteId,
+        categoriaAgenteId: parseInt(categoriaAgenteId, 10),
         ativo 
     };
 
