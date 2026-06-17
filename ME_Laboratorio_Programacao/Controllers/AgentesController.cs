@@ -47,16 +47,27 @@ public class AgentesController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AtualizarAgente(int id, [FromBody] AgenteRequest request)
     {
-        var agenteBanco = await _context.Agentes.FindAsync(id);
-        if (agenteBanco == null) return NotFound();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
-        agenteBanco.Nome = request.Nome;
-        agenteBanco.CategoriaAgenteId = request.CategoriaAgenteId;
-        agenteBanco.Descricao = request.Descricao;
-        agenteBanco.Ativo = request.Ativo;
+        try { 
+            var agenteBanco = await _context.Agentes.FindAsync(id);
+            if (agenteBanco == null) return NotFound();
 
-        await _context.SaveChangesAsync();
-        return NoContent();
+            agenteBanco.Nome = request.Nome;
+            agenteBanco.CategoriaAgenteId = request.CategoriaAgenteId;
+            agenteBanco.Descricao = request.Descricao;
+            agenteBanco.Ativo = request.Ativo;
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { mensagem = "Ocorreu um erro no servidor: " + ex.Message });
+        }
     }
 
     [HttpDelete("{id}")]

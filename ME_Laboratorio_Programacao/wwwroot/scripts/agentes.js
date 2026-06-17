@@ -51,7 +51,13 @@ async function carregarAgentes() {
 }
 
 window.modalAgente = async function (a = null) {
-    console.log(a)
+
+    const resCategorias = await fetch(`${API_URL}/CategoriaAgente/categorias`, fetchOptions('GET'));
+    var categorias;
+    if (resCategorias.ok) {
+        categorias = await resCategorias.json();
+    }
+
   openModal(`
     <h3>${a ? 'Editar Agente' : 'Novo Agente'}</h3>
     
@@ -66,13 +72,13 @@ window.modalAgente = async function (a = null) {
     </div>
 
         <div class="form-group">
-        <label>Perfil de Acesso</label>
+        <label>Categoria</label>
         <select id="ca-categoria" required>
             <option value="">Selecione uma categoria</option>
-            <option value="1" ${a?.categoriaAgenteId == 1 ? 'selected' : ''}>Vendas</option>
-            <option value="2" ${a?.categoriaAgenteId == 2 ? 'selected' : ''}>Suporte</option>
-            <option value="3" ${a?.categoriaAgenteId == 3 ? 'selected' : ''}>Financeiro</option>
-            <option value="4" ${a?.categoriaAgenteId == 4 ? 'selected' : ''}>RH</option>
+            ${categorias.map(c => {
+                const selecionado = a?.categoriaAgenteId === c.id ? 'selected' : '';
+                return `<option value="${c.id}" ${selecionado}>${c.nome}</option>`;
+            }).join('')}
         </select>
     </div>
 
@@ -108,10 +114,13 @@ window.salvarAgente = async function (id = null) {
         ativo 
     };
 
+    console.log(payload)
+
     const url = id ? `${API_URL}/agentes/${id}` : `${API_URL}/agentes`;
     const metodo = id ? 'PUT' : 'POST';
 
     try {
+        console.log(1)
         const response = await fetch(url, fetchOptions(metodo, payload));
 
         if (response.ok) {
@@ -120,7 +129,7 @@ window.salvarAgente = async function (id = null) {
             await carregarAgentes(); 
         } else {
             const erroTxt = await response.text();
-            alert(`Erro: ${erroTxt}`);
+            alert(`Não foi possível salvar o agente.`);
         }
     } catch (error) {
         console.error('Erro ao salvar agente:', error);

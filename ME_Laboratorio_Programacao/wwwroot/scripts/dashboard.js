@@ -98,6 +98,7 @@ function renderizarGraficoSessoesAgente(dados){
     
     const labels = dados.map(d => d.agente);
     const valores = dados.map(d => d.total);
+    console.log(dados)
 
     chartSessoesAgente = new Chart(ctx, {
         type: 'pie',
