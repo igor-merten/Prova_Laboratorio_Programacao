@@ -143,7 +143,8 @@ async function enviarMensagem() {
             const data = await res.json();
             adicionarBolhaMensagem(data.mensagem, false);
         } else {
-            alert('Erro ao enviar mensagem');
+            const erroTxt = await res.text();
+            alert(erroTxt || 'Erro ao enviar mensagem');
         }
     } catch (e) {
         console.error(e);

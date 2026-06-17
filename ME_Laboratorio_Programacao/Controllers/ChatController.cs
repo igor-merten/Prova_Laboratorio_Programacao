@@ -32,6 +32,12 @@ namespace ME_Laboratorio_Programacao.Controllers
         public async Task<IActionResult> IniciarSessao([FromBody] IniciarSessaoRequest request){
             var usuarioId = GetUsuarioId();
             
+            var agente = await _context.Agentes.FindAsync(request.AgenteId);
+            if (agente == null || !agente.Ativo) return BadRequest("Agente inativo ou não encontrado.");
+
+            var canal = await _context.CanaisOrigem.FindAsync(request.CanalOrigemId);
+            if (canal == null || !canal.Ativo) return BadRequest("Canal inativo ou não encontrado.");
+
             var sessaoAberta = await _context.SessoesAtendimento
                 .FirstOrDefaultAsync(s => s.UsuarioId == usuarioId && s.AgenteId == request.AgenteId && s.CanalOrigemId == request.CanalOrigemId && s.Status == "Aberta");
                 
@@ -129,9 +135,12 @@ namespace ME_Laboratorio_Programacao.Controllers
             var usuarioId = GetUsuarioId();
             var sessao = await _context.SessoesAtendimento
                 .Include(s => s.Agente)
+                .Include(s => s.CanalOrigem)
                 .FirstOrDefaultAsync(s => s.Id == request.SessaoId && s.UsuarioId == usuarioId);
 
-            if (sessao == null) return NotFound("Sessão não encontrada");
+            if (sessao == null) return NotFound("Sessão não encontrada.");
+            if (!sessao.Agente.Ativo) return BadRequest("Este agente foi inativado e não pode mais receber ou enviar mensagens.");
+            if (!sessao.CanalOrigem.Ativo) return BadRequest("O canal desta sessão foi inativado.");
 
             var msgUsuario = new Mensagem{
                 SessaoAtendimentoId = sessao.Id,
