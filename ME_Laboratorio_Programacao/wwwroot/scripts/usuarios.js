@@ -39,7 +39,7 @@ async function carregarUsuarios() {
                     ${u.ativo ? 'Ativo' : 'Inativo'}
                 </td>
                 <td>
-                    <button class="icon-btn" style="color: #00317C" onclick="prepararEdicao(${u.id}, '${u.nome}', ${u.perfilAcessoId || u.perfilId}, ${u.ativo})"> <i class="fa-solid fa-pen-to-square"></i> <small>Editar </small></button>
+                    <button class="icon-btn" style="color: #00317C" onclick="prepararEdicao(${u.id}, '${u.nome}', '${u.email}', ${u.perfilAcessoId || u.perfilId}, ${u.ativo})"> <i class="fa-solid fa-pen-to-square"></i> <small>Editar </small></button>
                     <span class="barrer">|</span>
                     <button class="icon-btn" style="color: #ca0707" onclick="deletarUsuario(${u.id})"><i class="fa-solid fa-trash-can"></i>  <small>Deletar </small></button>
                 </td>
@@ -95,8 +95,8 @@ window.modalUsuario = async function (u = null) {
   `);
 };
 
-window.prepararEdicao = function (id, nome, perfilAcessoId, ativo) {
-    window.modalUsuario({ id, nome, perfilAcessoId, ativo });
+window.prepararEdicao = function (id, nome, email, perfilAcessoId, ativo) {
+    window.modalUsuario({ id, nome, email, perfilAcessoId, ativo });
 };
 
 window.salvarUsuario = async function (id = null) {
