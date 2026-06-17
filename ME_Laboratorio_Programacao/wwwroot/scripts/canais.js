@@ -114,11 +114,14 @@ async function deletarCanal(id) {
         const response = await fetch(`${API_URL}/canais/${id}`, fetchOptions('DELETE'));
         if (response.ok) {
             carregarCanais();
-        } else {
+        } else if (response.status === 403) {
             alert('Você não tem permissão para excluir (Apenas Admin).');
+        } else {
+            alert('Não é possível excluir este canal pois ele já possui histórico no sistema. Para desativá-lo, clique em Editar e altere o Status para Inativo.');
         }
     } catch (error) {
-        alert('Erro ao tentar deletar.');
+        console.error('Erro ao deletar canal:', error);
+        alert('Erro ao tentar deletar o canal.');
     }
 }
 

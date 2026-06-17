@@ -159,11 +159,14 @@ async function deletarAgente(id) {
         const response = await fetch(`${API_URL}/agentes/${id}`, fetchOptions('DELETE'));
         if (response.ok) {
             carregarAgentes();
-        } else {
+        } else if (response.status === 403) {
             alert('Você não tem permissão para excluir (Apenas Admin).');
+        } else {
+            alert('Não é possível excluir este agente pois ele já possui histórico de conversas no sistema. Para desativá-lo, clique em Editar e altere o Status para Inativo.');
         }
     } catch (error) {
-        alert('Erro ao tentar deletar.');
+        console.error('Erro ao deletar agente:', error);
+        alert('Erro ao tentar deletar o agente.');
     }
 }
 

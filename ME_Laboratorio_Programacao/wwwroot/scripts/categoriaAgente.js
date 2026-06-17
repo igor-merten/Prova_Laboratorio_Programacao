@@ -51,11 +51,14 @@ window.deletarCategoria = async function (id) {
         const response = await fetch(`${API_URL}/categoriaagente/categorias/${id}`, fetchOptions('DELETE'));
         if (response.ok) {
             await carregarCategorias();
+        } else if (response.status === 403) {
+            alert('Você não tem permissão para excluir (Apenas Admin).');
         } else {
-            alert('Não foi possível excluir a categoria.');
+            alert('Não é possível excluir esta Categoria pois ela já está vinculada a um ou mais Agentes. Você deve excluir os Agentes vinculados primeiro ou alterar a categoria deles.');
         }
     } catch (error) {
-        alert('Erro ao tentar deletar.');
+        console.error('Erro ao deletar categoria:', error);
+        alert('Erro ao tentar deletar a categoria.');
     }
 };
 

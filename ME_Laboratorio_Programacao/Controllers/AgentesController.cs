@@ -1,4 +1,4 @@
-﻿using ME_Laboratorio_Programacao.Data;
+using ME_Laboratorio_Programacao.Data;
 using ME_Laboratorio_Programacao.DTOs;
 using ME_Laboratorio_Programacao.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -72,14 +72,19 @@ public class AgentesController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> DeletarCanal(int id)
+    public async Task<IActionResult> DeletarAgente(int id)
     {
         var agente = await _context.Agentes.FindAsync(id);
         if (agente == null) return NotFound();
 
-        _context.Agentes.Remove(agente);
-        await _context.SaveChangesAsync();
-        return NoContent();
+        try {
+            _context.Agentes.Remove(agente);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateException) {
+            return StatusCode(500, "Não é possível excluir o agente pois existem registros dependentes no banco.");
+        }
     }
 
 }

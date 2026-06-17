@@ -57,9 +57,14 @@ public class CanaisController : ControllerBase
         var canal = await _context.CanaisOrigem.FindAsync(id);
         if (canal == null) return NotFound();
 
-        _context.CanaisOrigem.Remove(canal);
-        await _context.SaveChangesAsync();
-        return Ok("Canal deletado com sucesso!");
+        try {
+            _context.CanaisOrigem.Remove(canal);
+            await _context.SaveChangesAsync();
+            return Ok("Canal deletado com sucesso!");
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateException) {
+            return StatusCode(500, "Não é possível excluir o canal pois existem registros dependentes no banco.");
+        }
     }
 
 }

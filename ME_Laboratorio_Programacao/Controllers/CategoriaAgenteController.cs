@@ -57,9 +57,14 @@ public class CategoriaAgenteController : ControllerBase
         var categoria = await _context.CategoriaAgentes.FindAsync(id);
         if (categoria == null) return NotFound();
 
-        _context.CategoriaAgentes.Remove(categoria);
-        await _context.SaveChangesAsync();
-        return Ok("Categoria deletada com sucesso!");
+        try {
+            _context.CategoriaAgentes.Remove(categoria);
+            await _context.SaveChangesAsync();
+            return Ok("Categoria deletada com sucesso!");
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateException) {
+            return StatusCode(500, "Não é possível excluir a categoria pois existem agentes vinculados a ela no banco de dados.");
+        }
     }
 
 }
