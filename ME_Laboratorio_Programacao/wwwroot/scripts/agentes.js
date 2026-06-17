@@ -67,7 +67,7 @@ window.modalAgente = async function (a = null) {
     </div>
 
     <div class="form-group">
-        <label>Nome</label>
+        <label>Descrição</label>
         <input id="ca-descricao" type="text" value="${a?.descricao ?? ''}" placeholder="Descrição agente">
     </div>
 
