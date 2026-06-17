@@ -69,7 +69,7 @@ window.modalCanal = async function (c = null) {
     
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:15px">
       <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-success" onclick="salvarUsuario(${c?.id ?? 'null'})">Salvar</button>
+      <button class="btn btn-success" onclick="salvarCanal(${c?.id ?? 'null'})">Salvar</button>
     </div>
   `);
 };
@@ -78,9 +78,14 @@ window.prepararEdicao = function (id, nome, ativo) {
     window.modalCanal({ id, nome, ativo });
 };
 
-window.salvarUsuario = async function (id = null) {
+window.salvarCanal = async function (id = null) {
     const nome = document.getElementById('ca-nome').value;
     const ativo = document.getElementById('ca-ativo').value === 'true'; 
+
+    if (!nome.trim()) {
+        alert("Por favor, preencha o nome do Canal.");
+        return;
+    }
 
     const payload = {
         nome,
