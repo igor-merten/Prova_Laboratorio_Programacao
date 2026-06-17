@@ -9,7 +9,7 @@ namespace ME_Laboratorio_Programacao.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class AgentesController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -20,7 +20,7 @@ public class AgentesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Operador")]
     public async Task<IActionResult> ListarAgentes()
     {
         return Ok(await _context.Agentes.Include(a => a.CategoriaAgente).OrderBy(a => a.Id).ToListAsync());

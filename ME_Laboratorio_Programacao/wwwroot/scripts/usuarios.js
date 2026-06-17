@@ -19,8 +19,14 @@ async function carregarUsuarios() {
         const usuarios = await response.json();
         usersTableBody.innerHTML = '';
 
+        const perfilLogado = localStorage.getItem('perfil');
         usuarios.forEach(u => {
             const tr = document.createElement('tr');
+            const botoesAcao = perfilLogado === 'Admin'
+                ? `<button class="icon-btn" style="color: #00317C" onclick="prepararEdicao(${u.id}, '${u.nome}', '${u.email}', ${u.perfilAcessoId || u.perfilId}, ${u.ativo})"> <i class="fa-solid fa-pen-to-square"></i> <small>Editar </small></button>
+                   <span class="barrer">|</span>
+                   <button class="icon-btn" style="color: #ca0707" onclick="deletarUsuario(${u.id})"><i class="fa-solid fa-trash-can"></i>  <small>Deletar </small></button>`
+                : `<small style="color:#94a3b8">Sem permissão</small>`;
             tr.innerHTML = `
                 <td>${u.id}</td>
                 <td>${u.nome}</td>
@@ -38,11 +44,7 @@ async function carregarUsuarios() {
                     "></span>
                     ${u.ativo ? 'Ativo' : 'Inativo'}
                 </td>
-                <td>
-                    <button class="icon-btn" style="color: #00317C" onclick="prepararEdicao(${u.id}, '${u.nome}', '${u.email}', ${u.perfilAcessoId || u.perfilId}, ${u.ativo})"> <i class="fa-solid fa-pen-to-square"></i> <small>Editar </small></button>
-                    <span class="barrer">|</span>
-                    <button class="icon-btn" style="color: #ca0707" onclick="deletarUsuario(${u.id})"><i class="fa-solid fa-trash-can"></i>  <small>Deletar </small></button>
-                </td>
+                <td>${botoesAcao}</td>
             `;
             usersTableBody.appendChild(tr);
         });

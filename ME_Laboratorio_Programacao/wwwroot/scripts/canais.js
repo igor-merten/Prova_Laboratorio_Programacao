@@ -2,6 +2,11 @@ const canaisTableBody = document.querySelector('#canais-table tbody');
 const userForm = document.getElementById('user-form');
 
 document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem('perfil') !== 'Admin') {
+        alert('Acesso negado. Apenas Administradores podem acessar esta página.');
+        window.location.href = 'dashboard.html';
+        return;
+    }
     carregarCanais();
 
 });
@@ -10,9 +15,14 @@ async function carregarCanais() {
     try {
         const response = await fetch(`${API_URL}/canais`, fetchOptions('GET'));
         
-        if (response.ativo === 401 || response.ativo === 403) {
-            alert('Sessão expirada ou acesso não autorizado.');
+        if (response.status === 401) {
+            alert('Sessão expirada. Faça login novamente.');
             efetuarLogoutLocal();
+            return;
+        }
+        if (response.status === 403) {
+            alert('Acesso negado. Apenas Administradores podem acessar esta página.');
+            window.location.href = 'dashboard.html';
             return;
         }
 

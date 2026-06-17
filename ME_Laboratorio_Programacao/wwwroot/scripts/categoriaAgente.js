@@ -66,9 +66,14 @@ async function carregarCategorias() {
     try {
         const response = await fetch(`${API_URL}/categoriaagente/categorias`, fetchOptions('GET'));
         
-        if (response.status === 401 || response.status === 403) {
-            alert('Sessão expirada ou acesso não autorizado.');
+        if (response.status === 401) {
+            alert('Sessão expirada. Faça login novamente.');
             efetuarLogoutLocal();
+            return;
+        }
+        if (response.status === 403) {
+            alert('Acesso negado. Apenas Administradores podem acessar esta página.');
+            window.location.href = 'dashboard.html';
             return;
         }
 

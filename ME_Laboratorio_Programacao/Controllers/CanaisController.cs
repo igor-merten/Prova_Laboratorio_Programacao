@@ -9,7 +9,7 @@ namespace ME_Laboratorio_Programacao.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class CanaisController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -20,7 +20,7 @@ public class CanaisController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Operador")]
     public async Task<IActionResult> ListarCanais()
     {
         return Ok(await _context.CanaisOrigem.ToListAsync());
