@@ -1,5 +1,4 @@
 using ME_Laboratorio_Programacao.Models;
-using ME_Laboratorio_Programacao.Models.Mensagens;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
