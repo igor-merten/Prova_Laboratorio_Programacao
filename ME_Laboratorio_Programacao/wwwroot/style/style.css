@@ -7,6 +7,11 @@
     --card-bg: #ffffff;
     --text: #1f2937;
     --border: #e5e7eb;
+    --surface: #ffffff;
+    --surface2: #f9fafb;
+    --muted: #4b5563;
+    --accent: #4f46e5;
+    --accent2: #111827;
 }
 
 * {
@@ -19,15 +24,15 @@
 body {
     background-color: var(--background);
     color: var(--text);
-    display: flex;
-    flex-direction: column;  
-    justify-content: flex-start; 
-    align-items: center;
     min-height: 100vh;
-    /* padding: 40px 20px; */
 }
 
-#app { display: flex; height: 100vh; overflow: hidden; }
+#app {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
 
 #sidebar {
   width: 240px;
@@ -75,14 +80,23 @@ body {
 }
 #sidebar .user-info strong { display: block; color: var(--text); margin-bottom: 4px; }
 
-#main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+#main {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+}
 
-#page-content { flex: 1; padding: 28px; }
+#page-content {
+    flex: 1;
+    padding: 32px;
+}
 
 .container {
-    width: 100vw;
-    max-width: 1000px;
-    margin: 0 2vw;
+    width: 100%;
+    margin: 0 auto;
+    display: block;
 }
 
 .card {
