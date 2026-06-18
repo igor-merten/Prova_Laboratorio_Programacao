@@ -1,8 +1,7 @@
-﻿namespace ME_Laboratorio_Programacao.Models;
+namespace ME_Laboratorio_Programacao.Models;
 
-public class CategoriaAgente
+public class CategoriaAgente : EntidadeBase
 {
-    public int Id { get; set; }
     public string Nome { get; set; } = "";
     public string CorHex { get; set; } = "#ffffff";
 
