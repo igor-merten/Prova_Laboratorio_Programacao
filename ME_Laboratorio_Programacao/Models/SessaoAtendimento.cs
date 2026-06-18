@@ -1,10 +1,9 @@
-﻿using ME_Laboratorio_Programacao.Models.Mensagens;
+using ME_Laboratorio_Programacao.Models.Mensagens;
 
 namespace ME_Laboratorio_Programacao.Models;
 
-public class SessaoAtendimento
+public class SessaoAtendimento : EntidadeBase
 {
-    public int Id { get; set; }
     public int UsuarioId { get; set; }
     public int AgenteId { get; set; }
     public int CanalOrigemId { get; set; }
