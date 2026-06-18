@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using ME_Laboratorio_Programacao.Data;
 using ME_Laboratorio_Programacao.Models;
 using ME_Laboratorio_Programacao.DTOs;
-using ME_Laboratorio_Programacao.Simuladores;
 using System.Security.Claims;
 using System;
 using System.Linq;
