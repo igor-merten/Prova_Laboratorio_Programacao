@@ -150,22 +150,24 @@ namespace ME_Laboratorio_Programacao.Controllers
             };
             _context.Mensagens.Add(msgUsuario);
 
-            AgenteSimulador motor;
+            // POLIMORFISMO E HERANÇA
+            AgenteSimulador motor; // Variavel que vai receber qualquer agenteSimulador
             switch (sessao.Agente.CategoriaAgenteId){
                 case 1:
-                    motor = new SimuladorVendas();
+                    motor = new SimuladorVendas(); // Recebe SimuladorVendas
                     break;
                 case 2:
-                    motor = new SimuladorSuporte();
+                    motor = new SimuladorSuporte(); // Recebe SimuladorSuporte
                     break;
                 case 4:
-                    motor = new SimuladorRH();
+                    motor = new SimuladorRH(); // Recebe SimuladorRH
                     break;
                 default:
-                    motor = new SimuladorPadrao();
+                    motor = new SimuladorPadrao(); // Recebe SimuladorPadrao
                     break;
             }
 
+            // E aqui chama o método certo de cada subclasse
             string respostaGerada = motor.GerarResposta(request.Conteudo);
 
             var msgAgente = new Mensagem{
