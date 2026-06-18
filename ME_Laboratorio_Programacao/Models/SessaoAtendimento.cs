@@ -2,7 +2,7 @@ using ME_Laboratorio_Programacao.Models.Mensagens;
 
 namespace ME_Laboratorio_Programacao.Models;
 
-public class SessaoAtendimento : EntidadeBase
+public class SessaoAtendimento : EntidadeBase // Classe SessaoAtendimento herdando da classe EntidadeBase
 {
     public int UsuarioId { get; set; }
     public int AgenteId { get; set; }

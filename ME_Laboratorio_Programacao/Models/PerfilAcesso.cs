@@ -1,6 +1,6 @@
 ﻿namespace ME_Laboratorio_Programacao.Models;
 
-public class PerfilAcesso : EntidadeBase
+public class PerfilAcesso : EntidadeBase // Classe PerfilAcesso herdando da classe EntidadeBase
 {
     public string Nome { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;

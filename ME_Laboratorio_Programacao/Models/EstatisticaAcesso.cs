@@ -1,6 +1,6 @@
 ﻿namespace ME_Laboratorio_Programacao.Models;
 
-public class EstatisticaAcesso : EntidadeBase
+public class EstatisticaAcesso : EntidadeBase // Classe EstatisticaAcesso herdando da classe EntidadeBase
 {
     public int AgenteId { get; set; }
     public int CanalOrigemId { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace ME_Laboratorio_Programacao.Models;
 
-public class Usuario : EntidadeBase
+public class Usuario : EntidadeBase // Classe Usuario herdando da classe EntidadeBase
 {
     public string Nome { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;

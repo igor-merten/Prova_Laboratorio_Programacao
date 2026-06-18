@@ -1,6 +1,6 @@
 ﻿using ME_Laboratorio_Programacao.Models;
 
-public class Agente : EntidadeBase
+public class Agente : EntidadeBase // Classe Agente herdando da classe EntidadeBase
 {
     public required virtual string Nome { get; set; }
     public string? Descricao { get; set; }

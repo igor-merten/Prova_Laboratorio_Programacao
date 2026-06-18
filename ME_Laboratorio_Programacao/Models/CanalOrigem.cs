@@ -1,6 +1,6 @@
 ﻿namespace ME_Laboratorio_Programacao.Models;
 
-public class CanalOrigem : EntidadeBase
+public class CanalOrigem : EntidadeBase // Classe CanalOrigem herdando da classe EntidadeBase
 {
     public required string Nome { get; set; }
     public bool Ativo { get; set; } = true;

@@ -1,6 +1,6 @@
 ﻿namespace ME_Laboratorio_Programacao.Models;
 
-public class LogAuditoria : EntidadeBase
+public class LogAuditoria : EntidadeBase // Classe LogAuditoria herdando da classe EntidadeBase
 {
     public int? UsuarioId { get; set; }
     public required string Acao { get; set; }
