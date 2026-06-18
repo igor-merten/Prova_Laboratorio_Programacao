@@ -74,13 +74,15 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<CategoriaAgente>()
-            .ToTable("CategoriaAgente");
+            .ToTable("CategoriaAgente")
+            .Ignore(c => c.DataCriacao);
 
         modelBuilder.Entity<CanalOrigem>()
             .ToTable("CanalOrigem");
 
         modelBuilder.Entity<SessaoAtendimento>()
-            .ToTable("SessaoAtendimento");
+            .ToTable("SessaoAtendimento")
+            .Ignore(s => s.DataCriacao);
 
         modelBuilder.Entity<Mensagem>()
             .ToTable("Mensagem");
