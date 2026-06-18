@@ -19,27 +19,38 @@ public class CategoriaAgenteController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("categorias")]
+    [HttpGet]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ListarCategorias()
     {
         return Ok(await _context.CategoriaAgentes.ToListAsync());
     }
 
-    [HttpPost("categorias")]
+    [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CriarCategoria([FromBody] CategoriaRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var categoria = new CategoriaAgente { Nome = request.Nome, CorHex = request.CorHex };
         _context.CategoriaAgentes.Add(categoria);
         await _context.SaveChangesAsync();
         return Ok(categoria);
+
     }
 
-    [HttpPut("categorias/{id}")]
+    [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var categoria = await _context.CategoriaAgentes.FindAsync(id);
         if (categoria == null) return NotFound();
 
@@ -48,16 +59,18 @@ public class CategoriaAgenteController : ControllerBase
 
         await _context.SaveChangesAsync();
         return Ok("Categoria atualizada com sucesso!");
+
     }
 
-    [HttpDelete("categorias/{id}")]
+    [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeletarCategoria(int id)
     {
         var categoria = await _context.CategoriaAgentes.FindAsync(id);
         if (categoria == null) return NotFound();
 
-        try {
+        try
+        {
             _context.CategoriaAgentes.Remove(categoria);
             await _context.SaveChangesAsync();
             return Ok("Categoria deletada com sucesso!");

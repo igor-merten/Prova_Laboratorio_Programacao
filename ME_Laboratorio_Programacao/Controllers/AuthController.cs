@@ -6,6 +6,7 @@ using ME_Laboratorio_Programacao.DTOs;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using ME_Laboratorio_Programacao.Models;
 
 namespace ME_Laboratorio_Programacao.Controllers;
 
@@ -23,9 +24,23 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var usuario = await _context.Usuarios
-            .Include(u => u.PerfilAcesso)
-            .FirstOrDefaultAsync(u => u.Email == request.Email);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        Usuario? usuario;
+
+        try
+        {
+            usuario = await _context.Usuarios
+                .Include(u => u.PerfilAcesso)
+                .FirstOrDefaultAsync(u => u.Email == request.Email);
+        }
+        catch (Exception ex) 
+        { 
+            return StatusCode(500, new { mensagem = "Ocorreu um erro ao buscar usuário.", detalhes = ex.Message });
+        }
 
         var hashSenha = GerarHashMd5(request.Senha);
 

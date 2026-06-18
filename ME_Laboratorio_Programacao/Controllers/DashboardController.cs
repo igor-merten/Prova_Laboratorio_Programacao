@@ -22,22 +22,23 @@ public class DashboardController : ControllerBase
         var totalMensagens = await _context.EstatisticasAcesso.SumAsync(e => e.TotalMensagens);
 
         var mensagensPorAgente = await _context.EstatisticasAcesso
-            .Include(e => e.Agente)
-            .GroupBy(e => e.Agente.Nome)
-            .Select(g => new { Agente = g.Key, Total = g.Sum(e => e.TotalMensagens) })
-            .ToListAsync();
+        .Include(e => e.Agente)
+        .GroupBy(e => e.Agente.Nome)
+        .Select(g => new { Agente = g.Key, Total = g.Sum(e => e.TotalMensagens) })
+        .ToListAsync();
 
         var sessoesPorCanal = await _context.EstatisticasAcesso
-            .Include(e => e.CanalOrigem)
-            .GroupBy(e => e.CanalOrigem.Nome)
-            .Select(g => new { Canal = g.Key, Total = g.Sum(e => e.TotalSessoes) })
-            .ToListAsync();
+        .Include(e => e.CanalOrigem)
+        .GroupBy(e => e.CanalOrigem.Nome)
+        .Select(g => new { Canal = g.Key, Total = g.Sum(e => e.TotalSessoes) })
+        .ToListAsync();
 
         var sessoesPorAgente = await _context.EstatisticasAcesso
-            .Include(e => e.Agente)
-            .GroupBy(e => e.Agente.Nome)
-            .Select(g => new { Agente = g.Key, Total = g.Sum(e => e.TotalSessoes) })
-            .ToListAsync();
+        .Include(e => e.Agente)
+        .GroupBy(e => e.Agente.Nome)
+        .Select(g => new { Agente = g.Key, Total = g.Sum(e => e.TotalSessoes) })
+        .ToListAsync();
+
 
         return Ok(new {
             TotalSessoes = totalSessoes,

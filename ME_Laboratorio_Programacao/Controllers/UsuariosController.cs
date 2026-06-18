@@ -38,6 +38,11 @@ public class UsuariosController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] UsuarioCreateRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         if (await _context.Usuarios.AnyAsync(u => u.Email == request.Email))
             return BadRequest("E-mail já cadastrado.");
 
@@ -53,12 +58,18 @@ public class UsuariosController : ControllerBase
         await _context.SaveChangesAsync();
 
         return Ok(usuario);
+
     }
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, [FromBody] UsuarioUpdateRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var usuario = await _context.Usuarios.FindAsync(id);
         if (usuario == null) return NotFound();
 
@@ -73,6 +84,7 @@ public class UsuariosController : ControllerBase
 
         await _context.SaveChangesAsync();
         return Ok("Usuário atualizado");
+
     }
 
     [HttpDelete("{id}")]
@@ -82,9 +94,16 @@ public class UsuariosController : ControllerBase
         var usuario = await _context.Usuarios.FindAsync(id);
         if (usuario == null) return NotFound();
 
-        _context.Usuarios.Remove(usuario);
-        await _context.SaveChangesAsync();
-        return Ok("Usuário deletado");
+        try
+        {
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+            return Ok("Usuário deletado");
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+        {
+            return StatusCode(500, "Não é possível excluir o usuário pois existem agentes vinculados a ele no banco de dados.");
+        }
     }
 
     private string GerarHashMd5(string input)

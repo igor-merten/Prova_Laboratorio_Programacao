@@ -1,3 +1,13 @@
-﻿namespace ME_Laboratorio_Programacao.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record CategoriaRequest(string Nome, string CorHex);
+namespace ME_Laboratorio_Programacao.DTOs;
+
+public record CategoriaRequest(
+
+    [Required(ErrorMessage = "O nome é obrigatório.")] 
+    string Nome,
+
+    [Required(ErrorMessage = "A cor hexadecimal é obrigatória.")]
+    string CorHex
+
+);

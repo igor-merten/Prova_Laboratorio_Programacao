@@ -30,6 +30,11 @@ public class CanaisController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CriarCanal([FromBody] CanalRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var canal = new CanalOrigem { Nome = request.Nome, Ativo = request.Ativo };
         _context.CanaisOrigem.Add(canal);
         await _context.SaveChangesAsync();
@@ -40,6 +45,11 @@ public class CanaisController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AtualizarCanal(int id, [FromBody] CanalRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var canal = await _context.CanaisOrigem.FindAsync(id);
         if (canal == null) return NotFound();
 

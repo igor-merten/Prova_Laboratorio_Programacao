@@ -25,7 +25,7 @@ window.salvarCategoria = async function (id = null) {
     }
 
     const payload = { nome, corHex };
-    const url = id ? `${API_URL}/categoriaagente/categorias/${id}` : `${API_URL}/categoriaagente/categorias`;
+    const url = id ? `${API_URL}/categoriaagente/${id}` : `${API_URL}/categoriaagente`;
     const metodo = id ? 'PUT' : 'POST';
 
     try {
@@ -48,7 +48,7 @@ window.deletarCategoria = async function (id) {
     if (!confirm('Deseja realmente excluir esta categoria?')) return;
 
     try {
-        const response = await fetch(`${API_URL}/categoriaagente/categorias/${id}`, fetchOptions('DELETE'));
+        const response = await fetch(`${API_URL}/categoriaagente/${id}`, fetchOptions('DELETE'));
         if (response.ok) {
             await carregarCategorias();
         } else if (response.status === 403) {
@@ -64,7 +64,7 @@ window.deletarCategoria = async function (id) {
 
 async function carregarCategorias() {
     try {
-        const response = await fetch(`${API_URL}/categoriaagente/categorias`, fetchOptions('GET'));
+        const response = await fetch(`${API_URL}/categoriaagente`, fetchOptions('GET'));
         
         if (response.status === 401) {
             alert('Sessão expirada. Faça login novamente.');

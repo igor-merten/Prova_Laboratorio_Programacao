@@ -1,4 +1,10 @@
-﻿namespace ME_Laboratorio_Programacao.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record LoginRequest(string Email, string Senha);
-public record PerfilAcessoRequest(string Nome, string Descricao);
+namespace ME_Laboratorio_Programacao.DTOs;
+
+public record LoginRequest(
+    [Required(ErrorMessage = "O nome é obrigatório.")] 
+    string Email,
+    [Required(ErrorMessage = "O nome é obrigatório.")] 
+    string Senha
+);

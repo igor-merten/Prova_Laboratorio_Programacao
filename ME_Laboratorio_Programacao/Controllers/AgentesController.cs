@@ -30,17 +30,24 @@ public class AgentesController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CriarAgente([FromBody] AgenteRequest request)
     {
-        Agente novoAgente = new Agente { 
-                Nome = request.Nome,
-                CategoriaAgenteId = request.CategoriaAgenteId,
-                Descricao = request.Descricao,
-                Ativo = request.Ativo
-            }; 
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        Agente novoAgente = new Agente
+        {
+            Nome = request.Nome,
+            CategoriaAgenteId = request.CategoriaAgenteId,
+            Descricao = request.Descricao,
+            Ativo = request.Ativo
+        };
 
         _context.Agentes.Add(novoAgente);
-        await _context.SaveChangesAsync(); // A auditoria vai identificar se salvou SuperAgente ou AgentePadrao!
+        await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(ListarAgentes), new { id = novoAgente.Id }, novoAgente);
+        
     }
 
     [HttpPut("{id}")]
@@ -52,22 +59,17 @@ public class AgentesController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        try { 
-            var agenteBanco = await _context.Agentes.FindAsync(id);
-            if (agenteBanco == null) return NotFound();
+        var agenteBanco = await _context.Agentes.FindAsync(id);
+        if (agenteBanco == null) return NotFound();
 
-            agenteBanco.Nome = request.Nome;
-            agenteBanco.CategoriaAgenteId = request.CategoriaAgenteId;
-            agenteBanco.Descricao = request.Descricao;
-            agenteBanco.Ativo = request.Ativo;
+        agenteBanco.Nome = request.Nome;
+        agenteBanco.CategoriaAgenteId = request.CategoriaAgenteId;
+        agenteBanco.Descricao = request.Descricao;
+        agenteBanco.Ativo = request.Ativo;
 
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { mensagem = "Ocorreu um erro no servidor: " + ex.Message });
-        }
+        await _context.SaveChangesAsync();
+        return NoContent();
+        
     }
 
     [HttpDelete("{id}")]
@@ -77,7 +79,8 @@ public class AgentesController : ControllerBase
         var agente = await _context.Agentes.FindAsync(id);
         if (agente == null) return NotFound();
 
-        try {
+        try
+        {
             _context.Agentes.Remove(agente);
             await _context.SaveChangesAsync();
             return NoContent();
