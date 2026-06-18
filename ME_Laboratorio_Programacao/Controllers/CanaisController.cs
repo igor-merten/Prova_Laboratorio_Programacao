@@ -4,6 +4,8 @@ using ME_Laboratorio_Programacao.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace ME_Laboratorio_Programacao.Controllers;
 
@@ -17,6 +19,10 @@ public class CanaisController : ControllerBase
     public CanaisController(AppDbContext context)
     {
         _context = context;
+    }
+    private int GetUsuarioId()
+    {
+        return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
     }
 
     [HttpGet]
@@ -36,6 +42,19 @@ public class CanaisController : ControllerBase
         }
 
         var canal = new CanalOrigem { Nome = request.Nome, Ativo = request.Ativo };
+
+        string payloadJson = JsonSerializer.Serialize(request);
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Criou canal de origem {canal.Nome}",
+            Entidade = "CanalOrigem",
+            Payload = payloadJson
+        };
+
+        _context.LogsAuditoria.Add(log);
+
         _context.CanaisOrigem.Add(canal);
         await _context.SaveChangesAsync();
         return Ok(canal);
@@ -56,6 +75,18 @@ public class CanaisController : ControllerBase
         canal.Nome = request.Nome;
         canal.Ativo = request.Ativo;
 
+        string payloadJson = JsonSerializer.Serialize(request);
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Atualizou canal de origem (ID: {id})",
+            Entidade = "CanalOrigem",
+            Payload = payloadJson
+        };
+
+        _context.LogsAuditoria.Add(log);
+
         await _context.SaveChangesAsync();
         return Ok("Canal atualizado com sucesso!");
     }
@@ -67,8 +98,20 @@ public class CanaisController : ControllerBase
         var canal = await _context.CanaisOrigem.FindAsync(id);
         if (canal == null) return NotFound();
 
-        try {
+        string payloadJson = JsonSerializer.Serialize(new { id = id });
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Deletou canal de origem {canal.Nome}",
+            Entidade = "CanalOrigem",
+            Payload = payloadJson
+        };
+
+        try
+        {
             _context.CanaisOrigem.Remove(canal);
+            _context.LogsAuditoria.Add(log);
             await _context.SaveChangesAsync();
             return Ok("Canal deletado com sucesso!");
         }

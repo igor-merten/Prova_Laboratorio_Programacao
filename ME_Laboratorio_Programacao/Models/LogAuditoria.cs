@@ -6,5 +6,7 @@ public class LogAuditoria : EntidadeBase // Classe LogAuditoria herdando da clas
     public required string Acao { get; set; }
     public string? Entidade { get; set; }
 
+    public string? Payload { get; set; }
+
     public virtual Usuario? Usuario { get; set; }
 }

@@ -4,6 +4,8 @@ using ME_Laboratorio_Programacao.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace ME_Laboratorio_Programacao.Controllers;
 
@@ -17,6 +19,10 @@ public class AgentesController : ControllerBase
     public AgentesController(AppDbContext context)
     {
         _context = context;
+    }
+    private int GetUsuarioId()
+    {
+        return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
     }
 
     [HttpGet]
@@ -44,6 +50,19 @@ public class AgentesController : ControllerBase
         };
 
         _context.Agentes.Add(novoAgente);
+
+        string payloadJson = JsonSerializer.Serialize(request);
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Criou agente {novoAgente.Nome}",
+            Entidade = "Agente",
+            Payload = payloadJson
+        };
+
+        _context.LogsAuditoria.Add(log);
+
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(ListarAgentes), new { id = novoAgente.Id }, novoAgente);
@@ -67,6 +86,18 @@ public class AgentesController : ControllerBase
         agenteBanco.Descricao = request.Descricao;
         agenteBanco.Ativo = request.Ativo;
 
+        string payloadJson = JsonSerializer.Serialize(request);
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Atualizou agente Id {agenteBanco.Id}",
+            Entidade = "Agente",
+            Payload = payloadJson
+        };
+
+        _context.LogsAuditoria.Add(log);
+
         await _context.SaveChangesAsync();
         return NoContent();
         
@@ -79,9 +110,20 @@ public class AgentesController : ControllerBase
         var agente = await _context.Agentes.FindAsync(id);
         if (agente == null) return NotFound();
 
+        string payloadJson = JsonSerializer.Serialize(new { id = id });
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Deletou agente {agente.Nome}",
+            Entidade = "Agente",
+            Payload = payloadJson
+        };
+
         try
         {
             _context.Agentes.Remove(agente);
+            _context.LogsAuditoria.Add(log);
             await _context.SaveChangesAsync();
             return NoContent();
         }

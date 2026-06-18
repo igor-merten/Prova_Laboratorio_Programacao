@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ME_Laboratorio_Programacao.DTOs;
 
@@ -7,7 +8,7 @@ public record UsuarioCreateRequest(
     string Nome,
     [Required(ErrorMessage = "O email é obrigatório.")] 
     string Email,
-    [Required(ErrorMessage = "A senha é obrigatório.")] 
+    [Required(ErrorMessage = "A senha é obrigatório.")]
     string Senha,
     [Required(ErrorMessage = "O perfil é obrigatório.")] 
     int PerfilAcessoId
@@ -17,7 +18,7 @@ public record UsuarioUpdateRequest(
     string Nome,
     [Required(ErrorMessage = "O status é obrigatório.")] 
     bool Ativo,
-    [Required(ErrorMessage = "A senha é obrigatória.")] 
-    string? Senha,
-    [Required(ErrorMessage = "O perfil é obrigatório.")] 
-    int PerfilAcessoId);
+    [Required(ErrorMessage = "O perfil é obrigatório.")]
+    int PerfilAcessoId,
+    string? Senha
+);

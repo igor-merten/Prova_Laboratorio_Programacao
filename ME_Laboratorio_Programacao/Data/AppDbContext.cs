@@ -64,7 +64,9 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<LogAuditoria>()
-            .ToTable("LogAuditoria");
+            .ToTable("LogAuditoria")
+            .Property(l => l.Payload)
+            .HasColumnType("jsonb");
 
         modelBuilder.Entity<LogAuditoria>()
             .HasOne(l => l.Usuario)

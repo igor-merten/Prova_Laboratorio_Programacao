@@ -62,11 +62,13 @@ async function carregarAgentes() {
 
 window.modalAgente = async function (a = null) {
 
-    const resCategorias = await fetch(`${API_URL}/CategoriaAgente/categorias`, fetchOptions('GET'));
+    const resCategorias = await fetch(`${API_URL}/categoriaagente`, fetchOptions('GET'));
     var categorias;
     if (resCategorias.ok) {
         categorias = await resCategorias.json();
     }
+
+    console.log(categorias)
 
   openModal(`
     <h3>${a ? 'Editar Agente' : 'Novo Agente'}</h3>

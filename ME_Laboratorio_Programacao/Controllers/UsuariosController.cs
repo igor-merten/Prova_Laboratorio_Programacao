@@ -5,8 +5,10 @@ using ME_Laboratorio_Programacao.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace ME_Laboratorio_Programacao.Controllers;
 
@@ -20,6 +22,11 @@ public class UsuariosController : ControllerBase
     public UsuariosController(AppDbContext context)
     {
         _context = context;
+    }
+
+    private int GetUsuarioId()
+    {
+        return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
     }
 
     [HttpGet]
@@ -55,6 +62,19 @@ public class UsuariosController : ControllerBase
         };
 
         _context.Usuarios.Add(usuario);
+
+        string payloadJson = JsonSerializer.Serialize(new { request.Nome, request.Email, Senha = "*******", request.PerfilAcessoId });
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Criou usuário {usuario.Nome}",
+            Entidade = "Usuario",
+            Payload = payloadJson
+        };
+
+        _context.LogsAuditoria.Add(log);
+
         await _context.SaveChangesAsync();
 
         return Ok(usuario);
@@ -82,6 +102,18 @@ public class UsuariosController : ControllerBase
             usuario.Senha = GerarHashMd5(request.Senha);
         }
 
+        string payloadJson = JsonSerializer.Serialize(new { request.Nome, Senha = "*******", request.Ativo, request.PerfilAcessoId});
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Alterou usuário Id {usuario.Id}",
+            Entidade = "Usuario",
+            Payload = payloadJson
+        };
+
+        _context.LogsAuditoria.Add(log);
+
         await _context.SaveChangesAsync();
         return Ok("Usuário atualizado");
 
@@ -94,9 +126,20 @@ public class UsuariosController : ControllerBase
         var usuario = await _context.Usuarios.FindAsync(id);
         if (usuario == null) return NotFound();
 
+        string payloadJson = JsonSerializer.Serialize(new { id = id });
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Deletou usuário {usuario.Nome}",
+            Entidade = "Usuario",
+            Payload = payloadJson
+        };
+
         try
         {
             _context.Usuarios.Remove(usuario);
+            _context.LogsAuditoria.Add(log);
             await _context.SaveChangesAsync();
             return Ok("Usuário deletado");
         }

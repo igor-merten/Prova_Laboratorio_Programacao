@@ -4,6 +4,8 @@ using ME_Laboratorio_Programacao.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace ME_Laboratorio_Programacao.Controllers;
 
@@ -17,6 +19,11 @@ public class CategoriaAgenteController : ControllerBase
     public CategoriaAgenteController(AppDbContext context)
     {
         _context = context;
+    }
+
+    private int GetUsuarioId()
+    {
+        return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
     }
 
     [HttpGet]
@@ -37,6 +44,19 @@ public class CategoriaAgenteController : ControllerBase
 
         var categoria = new CategoriaAgente { Nome = request.Nome, CorHex = request.CorHex };
         _context.CategoriaAgentes.Add(categoria);
+
+        string payloadJson = JsonSerializer.Serialize(request);
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Criou categoria {categoria.Nome}",
+            Entidade = "CategoriaAgente",
+            Payload = payloadJson
+        };
+
+        _context.LogsAuditoria.Add(log);
+
         await _context.SaveChangesAsync();
         return Ok(categoria);
 
@@ -57,6 +77,18 @@ public class CategoriaAgenteController : ControllerBase
         categoria.Nome = request.Nome;
         categoria.CorHex = request.CorHex;
 
+        string payloadJson = JsonSerializer.Serialize(request);
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Alterou categoria Id {categoria.Id}",
+            Entidade = "CategoriaAgente",
+            Payload = payloadJson
+        };
+
+        _context.LogsAuditoria.Add(log);
+
         await _context.SaveChangesAsync();
         return Ok("Categoria atualizada com sucesso!");
 
@@ -69,9 +101,20 @@ public class CategoriaAgenteController : ControllerBase
         var categoria = await _context.CategoriaAgentes.FindAsync(id);
         if (categoria == null) return NotFound();
 
+        string payloadJson = JsonSerializer.Serialize(new { id = id });
+
+        LogAuditoria log = new LogAuditoria
+        {
+            UsuarioId = GetUsuarioId(),
+            Acao = $"Deletou categoria {categoria.Nome}",
+            Entidade = "CategoriaAgente",
+            Payload = payloadJson
+        };
+
         try
         {
             _context.CategoriaAgentes.Remove(categoria);
+            _context.LogsAuditoria.Add(log);
             await _context.SaveChangesAsync();
             return Ok("Categoria deletada com sucesso!");
         }
