@@ -1,9 +1,9 @@
-using ME_Laboratorio_Programacao.Data;
+using Prova_Laboratorio_Programacao.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ME_Laboratorio_Programacao.Controllers;
+namespace Prova_Laboratorio_Programacao.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

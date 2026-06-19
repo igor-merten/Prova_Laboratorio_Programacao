@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace ME_Laboratorio_Programacao.DTOs;
+namespace Prova_Laboratorio_Programacao.DTOs;
 
 public record UsuarioCreateRequest(
     [Required(ErrorMessage = "O nome é obrigatório.")]

@@ -1,6 +1,6 @@
-﻿using ME_Laboratorio_Programacao.Models.Interfaces;
+﻿using Prova_Laboratorio_Programacao.Models.Interfaces;
 
-namespace ME_Laboratorio_Programacao.Models;
+namespace Prova_Laboratorio_Programacao.Models;
 
 public abstract class EntidadeBase : IAuditavel // Aqui a herança continuando, a classe base herdando da interface IAuditavel
 {

@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ME_Laboratorio_Programacao.Data;
-using ME_Laboratorio_Programacao.Models;
-using ME_Laboratorio_Programacao.DTOs;
+using Prova_Laboratorio_Programacao.Data;
+using Prova_Laboratorio_Programacao.Models;
+using Prova_Laboratorio_Programacao.DTOs;
 using System.Security.Claims;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ME_Laboratorio_Programacao.Controllers
+namespace Prova_Laboratorio_Programacao.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,8 +1,8 @@
-using ME_Laboratorio_Programacao.Models;
+using Prova_Laboratorio_Programacao.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace ME_Laboratorio_Programacao.Data;
+namespace Prova_Laboratorio_Programacao.Data;
 
 public class AppDbContext : DbContext
 {

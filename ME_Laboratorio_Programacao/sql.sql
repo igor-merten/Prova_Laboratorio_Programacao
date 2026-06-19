@@ -165,15 +165,3 @@ INSERT INTO "CanalOrigem" ("Nome", "Ativo") VALUES
   ('Site Principal', true),
   ('Loja Virtual', true),
   ('App Mobile', true);
-
--- CREATE INDEX "IX_Usuarios_PerfilAcessoId"         ON "Usuarios"          ("PerfilAcessoId");
--- CREATE INDEX "IX_Agente_CategoriaAgenteId"        ON "Agente"            ("CategoriaAgenteId");
--- CREATE INDEX "IX_Sessao_UsuarioId"                ON "SessaoAtendimento" ("UsuarioId");
--- CREATE INDEX "IX_Sessao_AgenteId"                 ON "SessaoAtendimento" ("AgenteId");
--- CREATE INDEX "IX_Sessao_CanalOrigemId"            ON "SessaoAtendimento" ("CanalOrigemId");
--- CREATE INDEX "IX_Mensagem_SessaoAtendimentoId"    ON "Mensagem"          ("SessaoAtendimentoId");
--- CREATE INDEX "IX_Contexto_AgenteId"               ON "ContextoMemoria"   ("AgenteId");
--- CREATE INDEX "IX_Contexto_UsuarioId"              ON "ContextoMemoria"   ("UsuarioId");
--- CREATE INDEX "IX_Log_UsuarioId"                   ON "LogAuditoria"      ("UsuarioId");
--- CREATE INDEX "IX_Estatistica_AgenteId"            ON "EstatisticaAcesso" ("AgenteId");
--- CREATE INDEX "IX_Estatistica_CanalOrigemId"       ON "EstatisticaAcesso" ("CanalOrigemId");

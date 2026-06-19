@@ -1,4 +1,4 @@
-namespace ME_Laboratorio_Programacao.Models
+namespace Prova_Laboratorio_Programacao.Models
 {
     // Classe base ABSTRATA - Define o que será herdado
     public abstract class AgenteSimulador{

@@ -1,6 +1,6 @@
-﻿using ME_Laboratorio_Programacao.Models;
+﻿using Prova_Laboratorio_Programacao.Models;
 
-namespace ME_Laboratorio_Programacao.Models;
+namespace Prova_Laboratorio_Programacao.Models;
 
 public class Mensagem
 {

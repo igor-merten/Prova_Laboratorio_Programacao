@@ -1,5 +1,5 @@
 // Program.cs
-using ME_Laboratorio_Programacao.Data;
+using Prova_Laboratorio_Programacao.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

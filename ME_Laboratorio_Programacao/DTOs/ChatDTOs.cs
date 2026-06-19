@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ME_Laboratorio_Programacao.DTOs;
+namespace Prova_Laboratorio_Programacao.DTOs;
 
 public record IniciarSessaoRequest(
     [Required(ErrorMessage = "O Id de Agente é obrigatório.")]

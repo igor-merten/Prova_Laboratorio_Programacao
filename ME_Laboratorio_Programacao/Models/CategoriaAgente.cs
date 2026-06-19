@@ -1,4 +1,4 @@
-namespace ME_Laboratorio_Programacao.Models;
+namespace Prova_Laboratorio_Programacao.Models;
 
 public class CategoriaAgente : EntidadeBase // Classe CategoriaAgente herdando da classe EntidadeBase
 {

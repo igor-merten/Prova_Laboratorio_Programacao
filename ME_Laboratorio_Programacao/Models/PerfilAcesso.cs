@@ -1,4 +1,4 @@
-﻿namespace ME_Laboratorio_Programacao.Models;
+﻿namespace Prova_Laboratorio_Programacao.Models;
 
 public class PerfilAcesso : EntidadeBase // Classe PerfilAcesso herdando da classe EntidadeBase
 {

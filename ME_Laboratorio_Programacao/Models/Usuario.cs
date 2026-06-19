@@ -1,4 +1,4 @@
-﻿namespace ME_Laboratorio_Programacao.Models;
+﻿namespace Prova_Laboratorio_Programacao.Models;
 
 public class Usuario : EntidadeBase // Classe Usuario herdando da classe EntidadeBase
 {

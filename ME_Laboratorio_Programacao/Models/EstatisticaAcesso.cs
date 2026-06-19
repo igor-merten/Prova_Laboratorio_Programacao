@@ -1,4 +1,4 @@
-﻿namespace ME_Laboratorio_Programacao.Models;
+﻿namespace Prova_Laboratorio_Programacao.Models;
 
 public class EstatisticaAcesso : EntidadeBase // Classe EstatisticaAcesso herdando da classe EntidadeBase
 {
