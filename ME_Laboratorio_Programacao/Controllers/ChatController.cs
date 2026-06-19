@@ -236,12 +236,7 @@ namespace Prova_Laboratorio_Programacao.Controllers
 
             _context.SessoesAtendimento.Remove(sessao);
             await _context.SaveChangesAsync();
-            var temSessoes = await _context.SessoesAtendimento.AnyAsync();
-            if (!temSessoes)
-            {
-                await _context.Database.ExecuteSqlRawAsync("ALTER SEQUENCE \"SessaoAtendimento_Id_seq\" RESTART WITH 1");
-            }
-
+            
             return Ok("Sessão e histórico deletados com sucesso!");
         }
     }
