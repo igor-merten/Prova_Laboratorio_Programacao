@@ -25,6 +25,13 @@ namespace Prova_Laboratorio_Programacao.Models
             return $"[RH] Nós recebemos sua mensagem. Nossas vagas ficam disponíveis na aba de Trabalhe Conosco. Deseja registrar alguma ocorrência interna?";
         }
     }
+    
+    // Classe FILHA - Herda da classe pai
+    public class SimuladorFinanceiro : AgenteSimulador{
+        public override string GerarResposta(string mensagemUsuario){
+            return $"[Financeiro] Recebemos sua mensagem. Nosso horário de atendimento é de segunda a sexta, das 9h às 18h. Deseja registrar alguma ocorrência interna?";
+        }
+    }
 
     // Classe FILHA - Herda da classe pai
     public class SimuladorPadrao : AgenteSimulador{

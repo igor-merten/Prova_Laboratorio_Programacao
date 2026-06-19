@@ -98,9 +98,14 @@ public class AgentesController : ControllerBase
 
         _context.LogsAuditoria.Add(log);
 
-        await _context.SaveChangesAsync();
-        return NoContent();
-        
+        try {
+            await _context.SaveChangesAsync();
+            return NoContent();
+        } catch (Exception ex) {
+            Console.WriteLine($"ERRO AO ATUALIZAR AGENTE: {ex.Message}");
+            Console.WriteLine(ex.InnerException?.Message);
+            return StatusCode(500, ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]
@@ -120,8 +125,7 @@ public class AgentesController : ControllerBase
             Payload = payloadJson
         };
 
-        try
-        {
+        try {   
             _context.Agentes.Remove(agente);
             _context.LogsAuditoria.Add(log);
             await _context.SaveChangesAsync();

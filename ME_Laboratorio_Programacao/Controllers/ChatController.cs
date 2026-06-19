@@ -157,6 +157,9 @@ namespace Prova_Laboratorio_Programacao.Controllers
                 case 2:
                     motor = new SimuladorSuporte(); // Recebe SimuladorSuporte
                     break;
+                case 3:
+                    motor = new SimuladorFinanceiro(); // Recebe SimuladorFinanceiro
+                    break;
                 case 4:
                     motor = new SimuladorRH(); // Recebe SimuladorRH
                     break;
