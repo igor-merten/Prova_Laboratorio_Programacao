@@ -54,7 +54,14 @@ async function carregarUsuarios() {
 }
 
 window.modalUsuario = async function (u = null) {
-    console.log(u)
+    const resPerfis = await fetch(`${API_URL}/perfilacesso`, fetchOptions('GET'));
+    var perfis;
+    if (resPerfis.ok) {
+        perfis = await resPerfis.json();
+    }
+
+    console.log(perfis)
+
   openModal(`
     <h3>${u ? 'Editar Usuário' : 'Novo Usuário'}</h3>
     
@@ -77,8 +84,10 @@ window.modalUsuario = async function (u = null) {
         <label>Perfil de Acesso</label>
         <select id="mu-perfil" required>
             <option value="">Selecione o Perfil</option>
-            <option value="1" ${u?.perfilAcessoId == 1 ? 'selected' : ''}>Admin</option>
-            <option value="2" ${u?.perfilAcessoId == 2 ? 'selected' : ''}>Operador</option>
+            ${perfis.map(p => {
+                const selecionado = u?.perfilAcessoId === p.id ? 'selected' : '';
+                return `<option value="${p.id}" ${selecionado}>${p.nome}</option>`;
+            }).join('')}
         </select>
     </div>
 
